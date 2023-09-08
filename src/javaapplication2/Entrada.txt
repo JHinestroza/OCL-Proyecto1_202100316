@@ -1,0 +1,7 @@
+Evaluar[1+1];
+Evaluar[1*2];
+Evaluar[1-3];
+
+void main () {
+  Console.Write("ASDASDAD");
+}
