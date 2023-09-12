@@ -8,31 +8,44 @@ package Analizador;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int MENOS = 8;
-  public static final int PUNTO = 19;
-  public static final int CADENA = 15;
-  public static final int PRUEBA = 18;
-  public static final int DECIMAL = 12;
-  public static final int REVALUAR = 14;
-  public static final int IMPRIMIR = 20;
-  public static final int UMENOS = 13;
-  public static final int WRITE = 17;
-  public static final int COMILLAS = 16;
-  public static final int POR = 9;
-  public static final int EOF = 0;
-  public static final int MAIN = 21;
-  public static final int DIV = 10;
-  public static final int PAR_IZQ = 3;
-  public static final int error = 1;
   public static final int PAR_DER = 4;
-  public static final int COR_IZQ = 5;
-  public static final int COR_DER = 6;
+  public static final int POR = 9;
+  public static final int IMPRIMIR = 18;
   public static final int ENTERO = 11;
-  public static final int CHR_IZQ = 23;
-  public static final int VOID = 22;
-  public static final int CHR_DER = 24;
-  public static final int MAS = 7;
+  public static final int CHR_IZQ = 21;
+  public static final int COR_DER = 6;
+  public static final int WRITE = 16;
+  public static final int nada = 26;
+  public static final int IGUAL = 24;
+  public static final int IGUALDAD = 27;
+  public static final int DIV = 10;
+  public static final int VARCHAR = 35;
+  public static final int MAIN = 19;
+  public static final int UMENOS = 13;
+  public static final int ID = 23;
+  public static final int REVALUAR = 14;
+  public static final int EOF = 0;
+  public static final int DECIMAL = 12;
+  public static final int error = 1;
+  public static final int PRUEBA = 34;
+  public static final int CADENA = 15;
+  public static final int MENOS = 8;
+  public static final int MAYOR_QUE = 29;
+  public static final int PAR_IZQ = 3;
+  public static final int CHR_DER = 22;
+  public static final int VOID = 20;
+  public static final int ENCICLADO = 32;
+  public static final int VARBOOL = 36;
+  public static final int PUNTO = 17;
+  public static final int VARSTRING = 37;
+  public static final int MAYOR_IGUAL = 31;
+  public static final int COR_IZQ = 5;
   public static final int PTCOMA = 2;
+  public static final int MENOR_QUE = 28;
+  public static final int MENOR_IGUAL = 30;
+  public static final int EXPRESION = 33;
+  public static final int RIF = 25;
+  public static final int MAS = 7;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -50,15 +63,28 @@ public class sym {
   "UMENOS",
   "REVALUAR",
   "CADENA",
-  "COMILLAS",
   "WRITE",
-  "PRUEBA",
   "PUNTO",
   "IMPRIMIR",
   "MAIN",
   "VOID",
   "CHR_IZQ",
-  "CHR_DER"
+  "CHR_DER",
+  "ID",
+  "IGUAL",
+  "RIF",
+  "nada",
+  "IGUALDAD",
+  "MENOR_QUE",
+  "MAYOR_QUE",
+  "MENOR_IGUAL",
+  "MAYOR_IGUAL",
+  "ENCICLADO",
+  "EXPRESION",
+  "PRUEBA",
+  "VARCHAR",
+  "VARBOOL",
+  "VARSTRING"
   };
 }
 

@@ -1,11 +1,13 @@
 package Analizador;
 import java_cup.runtime.Symbol;
 import Errores.Exception_;
+import Tokems.Tokems;
 import java.util.ArrayList;
 
 %%
 
 %{
+    public static ArrayList<Tokems> lexemas = new ArrayList<Tokems>();
     //se agrega el codigo que necesite en java
     public static ArrayList<Exception_> erroreslexicos = new ArrayList<Exception_>(); //estatico para que no se borre
 %}
@@ -18,6 +20,11 @@ import java.util.ArrayList;
 %unicode        // tipo de codigicacion para que acepte la  ñ u otro caracter
 %ignorecase     // case insensitive 
 
+%init{ 
+	yyline = 1; 
+	yychar = 1; 
+%init} 
+
 //simbolos
 PAR_IZQ   = "("
 PAR_DER   = ")"
@@ -26,18 +33,20 @@ CHR_DER   = "}"
 COR_IZQ  = "["
 COR_DER  = "]" 
 PTCOMA  = ";"
-COMILLAS  = "\""
 PUNTO = "."
-PRUEBA = "Evaluar"
-
-
+IGUAL       = "="
 MAS = "+"
 MENOS = "-"
 POR = "*"
 DIV = "/"
 
+
+
+
 //palabras reservadas
 REVALUAR = "Evaluar"
+ENCICLADO = "while"
+
 
 //expresiones
 ENTERO  = [0-9]+   
@@ -45,70 +54,110 @@ DECIMAL = [0-9]+("."[  |0-9]+)?
 CADENA = [\"][^\"\n]+[\"]
 SPACE   = [\ \r\t\f\t]
 ENTER   = [\ \n]
-
+ID = [a-zA-Z_][a-zA-Z0-9_]*
+EXPRESION = "[\"][^\"\n]+["\]
 
 //RESERVADAS
 VOID = "void"
 MAIN = "main"
 IMPRIMIR = "Console"
 WRITE = "Write"
+PRUEBA = "int"
+VARCHAR = "char"
+VARBOOL = "bool"
+VARSTRING = "string"
+RIF = "if"
+IGUALDAD = "=="
+MENOR_QUE = "<"
+MAYOR_QUE = ">"
+MENOR_IGUAL = "<="
+MAYOR_IGUAL = ">="
+
 
 
 
 %%
 
-<YYINITIAL> {REVALUAR}  {   return new Symbol(sym.REVALUAR, yyline, yycolumn,yytext());  }
 
-<YYINITIAL> {IMPRIMIR}     { return new Symbol(sym.IMPRIMIR, yyline, yycolumn,yytext());}
+<YYINITIAL> {REVALUAR}  {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.REVALUAR, yyline, yychar,yytext());  }
 
-<YYINITIAL> {WRITE}     { return new Symbol(sym.WRITE, yyline, yycolumn,yytext());}
+<YYINITIAL> {ENCICLADO}  {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.ENCICLADO, yyline, yychar,yytext());  }
 
-<YYINITIAL> {PRUEBA}  {   return new Symbol(sym.PRUEBA, yyline, yycolumn,yytext());  }
+<YYINITIAL> {PRUEBA}  {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.PRUEBA, yyline, yychar,yytext());  }
 
-<YYINITIAL> {PAR_IZQ}   {   return new Symbol(sym.PAR_IZQ, yyline, yycolumn,yytext());  }
+<YYINITIAL> {VARBOOL}  {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.VARBOOL, yyline, yychar,yytext());  }
 
-<YYINITIAL> {PAR_DER}   {   return new Symbol(sym.PAR_DER, yyline, yycolumn,yytext());  }
+<YYINITIAL> {VARCHAR}  {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.VARCHAR, yyline, yychar,yytext());  }
 
-<YYINITIAL> {COR_IZQ}   {   return new Symbol(sym.COR_IZQ, yyline, yycolumn,yytext());  }
+<YYINITIAL> {VARSTRING}  {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.VARSTRING, yyline, yychar,yytext());  }
 
-<YYINITIAL> {COR_DER}   {   return new Symbol(sym.COR_DER, yyline, yycolumn,yytext());  }
+<YYINITIAL> {RIF}  {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.RIF, yyline, yychar,yytext());  }
 
-<YYINITIAL> {PTCOMA}    {   return new Symbol(sym.PTCOMA, yyline, yycolumn,yytext());   }
+<YYINITIAL> {IMPRIMIR} {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.IMPRIMIR, yyline, yychar,yytext());}
 
-<YYINITIAL> {MAS}       {   return new Symbol(sym.MAS, yyline, yycolumn,yytext());  }
+<YYINITIAL> {WRITE}     {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.WRITE, yyline, yychar,yytext());}
 
-<YYINITIAL> {MENOS}     {   return new Symbol(sym.MENOS, yyline, yycolumn,yytext());    }
+<YYINITIAL> {PAR_IZQ}   {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.PAR_IZQ, yyline, yychar,yytext());  }
 
-<YYINITIAL> {POR}       {   return new Symbol(sym.POR, yyline, yycolumn,yytext());   }
+<YYINITIAL> {PAR_DER}   {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.PAR_DER, yyline, yychar,yytext());  }
 
-<YYINITIAL> {DIV}       {   return new Symbol(sym.DIV, yyline, yycolumn,yytext());   }
+<YYINITIAL> {COR_IZQ}   {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.COR_IZQ, yyline, yychar,yytext());  }
 
-<YYINITIAL> {ENTERO}    {   return new Symbol(sym.ENTERO, yyline, yycolumn,yytext());   }
+<YYINITIAL> {COR_DER}  {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.COR_DER, yyline, yychar,yytext());  }
 
-<YYINITIAL> {DECIMAL}   {   return new Symbol(sym.DECIMAL, yyline, yycolumn,yytext());  }
+<YYINITIAL> {PTCOMA}  {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));  System.out.println(";"); return new Symbol(sym.PTCOMA, yyline, yychar ,yytext());   }
+
+<YYINITIAL> {MAS}       {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.MAS, yyline, yychar ,yytext());  }
+
+<YYINITIAL> {MENOS}     {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));;   return new Symbol(sym.MENOS, yyline, yychar ,yytext());    }
+
+<YYINITIAL> {POR}       {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.POR, yyline, yychar ,yytext());   }
+
+<YYINITIAL> {DIV}       {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.DIV, yyline, yychar ,yytext());   }
+
+<YYINITIAL> {ENTERO}    {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));;   return new Symbol(sym.ENTERO, yyline, yychar ,yytext());   }
+
+<YYINITIAL> {DECIMAL}   {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.DECIMAL, yyline, yychar ,yytext());  }
 
 <YYINITIAL> {SPACE}     { /*Espacios en blanco, ignorados*/ }
 
-<YYINITIAL> {ENTER}     { /*Saltos de linea, ignorados*/}
+\n {yychar=1;}
 
-<YYINITIAL> {CADENA}     { return new Symbol(sym.CADENA, yyline, yycolumn,yytext());}
+<YYINITIAL> {CADENA}     {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));; return new Symbol(sym.CADENA, yyline, yychar ,yytext());}
 
-<YYINITIAL> {COMILLAS}     { return new Symbol(sym.COMILLAS, yyline, yycolumn,yytext());}
+<YYINITIAL> {EXPRESION}  {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));; return new Symbol(sym.CADENA, yyline, yychar ,yytext());}
 
-<YYINITIAL> {PUNTO}     { return new Symbol(sym.PUNTO, yyline, yycolumn,yytext());}
+<YYINITIAL> {PUNTO}     {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.PUNTO, yyline, yychar ,yytext());}
 
-<YYINITIAL> {VOID}  {   return new Symbol(sym.VOID, yyline, yycolumn,yytext());  }
+<YYINITIAL> {VOID}  {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.VOID, yyline, yychar ,yytext());  }
 
-<YYINITIAL> {MAIN}     { return new Symbol(sym.MAIN, yyline, yycolumn,yytext());}
+<YYINITIAL> {MAIN}     {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.MAIN, yyline, yychar ,yytext());}
 
-<YYINITIAL> {CHR_IZQ}  {   return new Symbol(sym.CHR_IZQ, yyline, yycolumn,yytext());  }
+<YYINITIAL> {CHR_IZQ}  {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.CHR_IZQ, yyline, yychar ,yytext());  }
 
-<YYINITIAL> {CHR_DER}     { return new Symbol(sym.CHR_DER, yyline, yycolumn,yytext());}
+<YYINITIAL> {CHR_DER}     {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.CHR_DER, yyline, yychar ,yytext());}
+
+<YYINITIAL> {ID}     {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.ID, yyline, yychar ,yytext());}
+
+<YYINITIAL> {IGUAL}     {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.IGUAL, yyline, yychar ,yytext());}
+
+<YYINITIAL> {IGUALDAD}     {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.IGUALDAD, yyline, yychar ,yytext());}
+
+<YYINITIAL> {MENOR_QUE}     {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.MENOR_QUE, yyline, yychar ,yytext());}
+
+<YYINITIAL> {MAYOR_QUE}     {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.MAYOR_QUE, yyline, yychar ,yytext());}
+
+<YYINITIAL> {MENOR_IGUAL}     {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.MENOR_IGUAL, yyline, yychar ,yytext());}
+
+<YYINITIAL> {MAYOR_IGUAL}     {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.MAYOR_IGUAL, yyline, yychar ,yytext());}
+
+
+
 
 <YYINITIAL> . {
-        //String errLex = "Error léxico : '"+yytext()+"' en la línea: "+(yyline+1)+" y columna: "+(yycolumn+1);
+        //String errLex = "Error léxico: '"+yytext()+"' en la línea: "+(yyline+1)+" y columna: "+(yychar);
         //System.out.println(errLex);
-        erroreslexicos.add(new Exception_ ("Léxico","El caracter : '"+yytext()+"' no pertenece al lenguaje StatPy Convertor", Integer.toString(yyline), Integer.toString(yycolumn+1)));
+        erroreslexicos.add(new Exception_ ("Léxico","El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));
 }
 
 

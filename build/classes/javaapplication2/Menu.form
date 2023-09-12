@@ -141,9 +141,6 @@
       </Layout>
       <SubComponents>
         <Component class="java.awt.TextArea" name="Salida">
-          <Properties>
-            <Property name="editable" type="boolean" value="false"/>
-          </Properties>
         </Component>
         <Component class="java.awt.TextArea" name="Entrada">
         </Component>

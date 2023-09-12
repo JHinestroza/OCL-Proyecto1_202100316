@@ -4,4 +4,12 @@ Evaluar[1-3];
 
 void main () {
   Console.Write("ASDASDAD");
+  int a =1;
+  Evaluar[1*2+2];
+  if (b > a){
+    
+  }
 }
+
+//scanner.erroreslexicos.clear();
+            //scanner.erroreslexicos.clear();

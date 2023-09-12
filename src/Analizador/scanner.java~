@@ -3,6 +3,7 @@
 package Analizador;
 import java_cup.runtime.Symbol;
 import Errores.Exception_;
+import Tokems.Tokems;
 import java.util.ArrayList;
 
 
@@ -36,14 +37,15 @@ public class scanner implements java_cup.runtime.Scanner {
    * Translates characters to character classes
    */
   private static final String ZZ_CMAP_PACKED = 
-    "\11\0\1\27\1\26\1\42\1\27\1\27\22\0\1\30\1\0\1\10"+
-    "\5\0\1\1\1\2\1\22\1\20\1\0\1\21\1\11\1\23\12\24"+
-    "\1\0\1\7\5\0\1\14\1\0\1\36\1\33\1\12\3\0\1\32"+
-    "\2\0\1\15\1\34\1\35\1\31\2\0\1\17\1\37\1\41\1\16"+
-    "\1\13\1\40\3\0\1\5\1\0\1\6\3\0\1\14\1\0\1\36"+
-    "\1\33\1\12\3\0\1\32\2\0\1\15\1\34\1\35\1\31\2\0"+
-    "\1\17\1\37\1\41\1\16\1\13\1\40\3\0\1\3\1\25\1\4"+
-    "\7\0\1\42\252\0\2\32\115\0\1\37\u1ea8\0\1\42\1\42\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
+    "\11\0\1\33\1\32\1\55\1\33\1\33\22\0\1\34\1\0\1\31"+
+    "\5\0\1\1\1\2\1\14\1\12\1\0\1\13\1\10\1\15\12\27"+
+    "\1\0\1\7\1\53\1\11\1\54\2\0\1\20\1\50\1\44\1\41"+
+    "\1\16\1\52\1\51\1\25\1\36\2\35\1\21\1\42\1\43\1\40"+
+    "\2\35\1\23\1\46\1\47\1\22\1\17\1\24\3\35\1\5\1\0"+
+    "\1\6\1\37\1\35\1\0\1\20\1\50\1\44\1\41\1\16\1\52"+
+    "\1\51\1\25\1\36\2\35\1\21\1\42\1\43\1\40\2\35\1\23"+
+    "\1\46\1\47\1\22\1\17\1\24\3\35\1\3\1\30\1\4\7\0"+
+    "\1\55\252\0\2\26\115\0\1\45\u1ea8\0\1\55\1\55\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
 
   /** 
    * Translates characters to character classes
@@ -57,12 +59,19 @@ public class scanner implements java_cup.runtime.Scanner {
 
   private static final String ZZ_ACTION_PACKED_0 =
     "\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7"+
-    "\1\10\1\11\1\12\2\1\1\13\1\14\1\15\1\16"+
-    "\1\17\1\20\1\21\3\1\7\0\1\22\2\0\1\23"+
-    "\4\0\1\24\1\25\4\0\1\26\2\0\1\27\1\30";
+    "\1\10\1\11\1\12\1\13\1\14\1\15\1\16\4\17"+
+    "\1\1\1\20\1\1\1\21\1\22\3\17\1\1\2\17"+
+    "\1\23\1\24\1\0\1\25\4\17\1\0\1\26\2\0"+
+    "\1\17\1\26\3\17\1\0\2\17\1\27\1\30\1\0"+
+    "\1\17\1\0\1\17\1\0\1\17\1\0\1\17\1\31"+
+    "\1\32\1\33\1\31\1\0\3\17\1\0\2\17\1\0"+
+    "\1\17\2\34\1\0\1\17\1\0\1\17\2\35\1\36"+
+    "\1\0\1\17\1\0\1\17\1\37\1\0\1\17\2\40"+
+    "\2\41\1\0\1\17\1\0\1\17\1\0\1\17\1\0"+
+    "\1\17\2\42\1\0\1\43\2\44\3\0";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[49];
+    int [] result = new int[110];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -87,16 +96,23 @@ public class scanner implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\43\0\43\0\43\0\43\0\43\0\43\0\43"+
-    "\0\43\0\106\0\43\0\151\0\214\0\43\0\43\0\43"+
-    "\0\43\0\257\0\43\0\43\0\322\0\365\0\u0118\0\u013b"+
-    "\0\u015e\0\u0181\0\u01a4\0\u01c7\0\u01ea\0\u020d\0\43\0\u0230"+
-    "\0\u0253\0\u01a4\0\u0276\0\u0299\0\u02bc\0\u02df\0\43\0\43"+
-    "\0\u0302\0\u0325\0\u0348\0\u036b\0\43\0\u038e\0\u03b1\0\43"+
-    "\0\43";
+    "\0\0\0\56\0\56\0\56\0\56\0\56\0\134\0\56"+
+    "\0\56\0\56\0\212\0\56\0\56\0\56\0\56\0\270"+
+    "\0\346\0\u0114\0\u0142\0\u0170\0\u019e\0\u01cc\0\56\0\56"+
+    "\0\u01fa\0\u0228\0\u0256\0\u0284\0\u02b2\0\u02e0\0\u030e\0\u033c"+
+    "\0\u036a\0\56\0\u0398\0\u03c6\0\u03f4\0\u0422\0\u0450\0\56"+
+    "\0\u047e\0\u04ac\0\u04da\0\u0114\0\u0508\0\u0536\0\u0564\0\u0592"+
+    "\0\u05c0\0\u05ee\0\56\0\56\0\u061c\0\u064a\0\u0678\0\u06a6"+
+    "\0\u06d4\0\u0702\0\u0730\0\u075e\0\56\0\u047e\0\56\0\u0114"+
+    "\0\u078c\0\u07ba\0\u07e8\0\u0816\0\u0844\0\u0872\0\u08a0\0\u08ce"+
+    "\0\u08fc\0\56\0\u0114\0\u092a\0\u0958\0\u0986\0\u09b4\0\56"+
+    "\0\u0114\0\u0114\0\u09e2\0\u0a10\0\u0a3e\0\u0a6c\0\u0114\0\u0a9a"+
+    "\0\u0ac8\0\56\0\u0114\0\56\0\u0114\0\u0af6\0\u0b24\0\u0b52"+
+    "\0\u0b80\0\u0bae\0\u0bdc\0\u0c0a\0\u0c38\0\56\0\u0114\0\u0c66"+
+    "\0\u0114\0\56\0\u0114\0\u0c94\0\u0cc2\0\u0cf0";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[49];
+    int [] result = new int[110];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -120,20 +136,79 @@ public class scanner implements java_cup.runtime.Scanner {
 
   private static final String ZZ_TRANS_PACKED_0 =
     "\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\11"+
-    "\1\12\1\13\1\14\1\15\4\2\1\16\1\17\1\20"+
-    "\1\21\1\22\1\2\1\23\2\24\3\2\1\25\1\2"+
-    "\1\26\1\2\1\27\1\2\44\0\10\30\1\0\15\30"+
-    "\1\0\14\30\13\0\1\31\60\0\1\32\22\0\1\33"+
-    "\12\0\1\22\32\0\1\34\57\0\1\35\30\0\1\36"+
-    "\23\0\10\30\1\37\15\30\1\0\14\30\14\0\1\40"+
-    "\60\0\1\41\34\0\2\42\2\0\1\42\44\0\1\43"+
-    "\45\0\1\44\37\0\1\45\25\0\1\46\60\0\1\47"+
-    "\44\0\1\50\44\0\1\51\44\0\1\52\17\0\1\53"+
-    "\55\0\1\54\23\0\1\55\44\0\1\56\43\0\1\57"+
-    "\44\0\1\60\35\0\1\61\30\0";
+    "\1\12\1\13\1\14\1\15\1\16\1\17\1\20\1\21"+
+    "\4\22\1\23\1\22\1\24\1\25\1\2\1\26\1\27"+
+    "\2\30\1\22\1\31\1\2\2\22\1\32\1\22\1\33"+
+    "\1\34\1\35\1\22\1\36\2\22\1\37\1\40\110\0"+
+    "\1\41\35\0\1\42\62\0\1\22\1\43\6\22\1\0"+
+    "\1\22\5\0\2\22\1\0\5\22\1\0\5\22\21\0"+
+    "\10\22\1\0\1\22\5\0\2\22\1\0\1\44\4\22"+
+    "\1\0\5\22\21\0\10\22\1\0\1\22\5\0\2\22"+
+    "\1\0\5\22\1\0\5\22\21\0\5\22\1\45\1\22"+
+    "\1\46\1\0\1\22\5\0\2\22\1\0\5\22\1\0"+
+    "\5\22\46\0\1\47\6\0\1\50\13\0\1\51\16\0"+
+    "\1\25\26\0\31\52\2\0\23\52\16\0\10\22\1\0"+
+    "\1\22\5\0\2\22\1\0\3\22\1\53\1\22\1\0"+
+    "\4\22\1\54\21\0\2\22\1\55\5\22\1\0\1\22"+
+    "\5\0\2\22\1\0\5\22\1\0\5\22\21\0\7\22"+
+    "\1\56\1\0\1\22\5\0\2\22\1\0\1\57\4\22"+
+    "\1\0\5\22\52\0\1\60\24\0\10\22\1\0\1\22"+
+    "\5\0\2\22\1\0\5\22\1\0\1\22\1\61\3\22"+
+    "\21\0\10\22\1\0\1\22\5\0\2\22\1\0\1\62"+
+    "\4\22\1\0\5\22\14\0\1\63\55\0\1\64\52\0"+
+    "\1\65\65\0\2\22\1\66\5\22\1\0\1\22\5\0"+
+    "\2\22\1\0\5\22\1\0\5\22\21\0\10\22\1\67"+
+    "\1\22\5\0\1\22\1\70\1\0\5\22\1\0\5\22"+
+    "\21\0\10\22\1\71\1\22\5\0\1\22\1\72\1\0"+
+    "\5\22\1\0\5\22\21\0\10\22\1\73\1\22\5\0"+
+    "\1\22\1\74\1\0\5\22\1\0\5\22\52\0\1\75"+
+    "\35\0\2\76\3\0\1\76\21\0\31\52\1\77\1\0"+
+    "\23\52\16\0\10\22\1\0\1\22\5\0\2\22\1\0"+
+    "\5\22\1\0\1\22\1\100\3\22\21\0\10\22\1\101"+
+    "\1\22\5\0\1\22\1\102\1\0\5\22\1\0\5\22"+
+    "\21\0\2\22\1\103\5\22\1\0\1\22\5\0\2\22"+
+    "\1\0\5\22\1\0\5\22\21\0\10\22\1\0\1\22"+
+    "\5\0\2\22\1\0\3\22\1\104\1\22\1\0\5\22"+
+    "\26\0\1\105\50\0\5\22\1\106\2\22\1\0\1\22"+
+    "\5\0\2\22\1\0\5\22\1\0\5\22\21\0\10\22"+
+    "\1\0\1\22\5\0\2\22\1\0\1\107\4\22\1\0"+
+    "\5\22\10\0\1\110\66\0\3\22\1\111\4\22\1\0"+
+    "\1\22\5\0\2\22\1\0\5\22\1\0\5\22\44\0"+
+    "\1\112\32\0\10\22\1\0\1\22\5\0\2\22\1\0"+
+    "\1\22\1\113\3\22\1\0\5\22\52\0\1\114\24\0"+
+    "\10\22\1\0\1\22\5\0\2\22\1\0\5\22\1\0"+
+    "\1\22\1\115\3\22\24\0\1\116\52\0\3\22\1\117"+
+    "\4\22\1\0\1\22\5\0\2\22\1\0\5\22\1\0"+
+    "\5\22\46\0\1\120\30\0\10\22\1\0\1\22\5\0"+
+    "\2\22\1\0\3\22\1\121\1\22\1\0\5\22\21\0"+
+    "\5\22\1\122\2\22\1\0\1\22\5\0\2\22\1\0"+
+    "\5\22\1\0\5\22\21\0\10\22\1\0\1\22\5\0"+
+    "\2\22\1\0\5\22\1\123\1\124\4\22\31\0\1\125"+
+    "\7\0\1\125\35\0\10\22\1\125\1\22\5\0\1\22"+
+    "\1\126\1\0\5\22\1\0\5\22\21\0\3\22\1\127"+
+    "\4\22\1\0\1\22\5\0\2\22\1\0\5\22\1\0"+
+    "\5\22\42\0\1\130\34\0\4\22\1\131\3\22\1\0"+
+    "\1\22\5\0\2\22\1\0\5\22\1\0\5\22\21\0"+
+    "\1\132\55\0\1\133\7\22\1\0\1\22\5\0\2\22"+
+    "\1\0\5\22\1\0\5\22\21\0\1\134\55\0\1\135"+
+    "\7\22\1\0\1\22\5\0\2\22\1\0\5\22\1\0"+
+    "\5\22\43\0\1\136\33\0\10\22\1\0\1\22\5\0"+
+    "\2\22\1\0\1\137\4\22\1\0\5\22\46\0\1\140"+
+    "\30\0\10\22\1\0\1\22\5\0\2\22\1\0\3\22"+
+    "\1\141\1\22\1\0\5\22\34\0\1\142\42\0\2\22"+
+    "\1\143\5\22\1\0\1\22\5\0\2\22\1\0\5\22"+
+    "\1\0\5\22\24\0\1\144\52\0\3\22\1\145\4\22"+
+    "\1\0\1\22\5\0\2\22\1\0\5\22\1\0\5\22"+
+    "\54\0\1\146\22\0\10\22\1\0\1\22\5\0\2\22"+
+    "\1\0\5\22\1\0\3\22\1\147\1\22\35\0\1\150"+
+    "\41\0\5\22\1\151\2\22\1\0\1\22\5\0\2\22"+
+    "\1\0\5\22\1\0\5\22\21\0\1\152\55\0\1\153"+
+    "\7\22\1\0\1\22\5\0\2\22\1\0\5\22\1\0"+
+    "\5\22\11\0\1\154\61\0\1\155\50\0\1\156\56\0"+
+    "\1\77\47\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[980];
+    int [] result = new int[3358];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -171,12 +246,18 @@ public class scanner implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\10\11\1\1\1\11\2\1\4\11\1\1\2\11"+
-    "\3\1\7\0\1\11\2\0\1\1\4\0\2\11\4\0"+
-    "\1\11\2\0\2\11";
+    "\1\0\5\11\1\1\3\11\1\1\4\11\7\1\2\11"+
+    "\10\1\1\0\1\11\4\1\1\0\1\11\2\0\5\1"+
+    "\1\0\2\1\2\11\1\0\1\1\1\0\1\1\1\0"+
+    "\1\1\1\0\1\1\1\11\1\1\1\11\1\1\1\0"+
+    "\3\1\1\0\2\1\1\0\1\1\1\11\1\1\1\0"+
+    "\1\1\1\0\1\1\1\11\2\1\1\0\1\1\1\0"+
+    "\2\1\1\0\1\1\1\11\1\1\1\11\1\1\1\0"+
+    "\1\1\1\0\1\1\1\0\1\1\1\0\1\1\1\11"+
+    "\1\1\1\0\1\1\1\11\1\1\3\0";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[49];
+    int [] result = new int[110];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -252,6 +333,7 @@ public class scanner implements java_cup.runtime.Scanner {
   private int zzFinalHighSurrogate = 0;
 
   /* user code: */
+    public static ArrayList<Tokems> lexemas = new ArrayList<Tokems>();
     //se agrega el codigo que necesite en java
     public static ArrayList<Exception_> erroreslexicos = new ArrayList<Exception_>(); //estatico para que no se borre
 
@@ -262,6 +344,8 @@ public class scanner implements java_cup.runtime.Scanner {
    * @param   in  the java.io.Reader to read input from.
    */
   public scanner(java.io.Reader in) {
+  	yyline = 1; 
+	yychar = 1; 
     this.zzReader = in;
   }
 
@@ -276,7 +360,7 @@ public class scanner implements java_cup.runtime.Scanner {
     char [] map = new char[0x110000];
     int i = 0;  /* index in packed string  */
     int j = 0;  /* index in unpacked array */
-    while (i < 192) {
+    while (i < 210) {
       int  count = packed.charAt(i++);
       char value = packed.charAt(i++);
       do map[j++] = value; while (--count > 0);
@@ -638,127 +722,187 @@ public class scanner implements java_cup.runtime.Scanner {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { //String errLex = "Error léxico : '"+yytext()+"' en la línea: "+(yyline+1)+" y columna: "+(yycolumn+1);
+            { //String errLex = "Error léxico: '"+yytext()+"' en la línea: "+(yyline+1)+" y columna: "+(yychar);
         //System.out.println(errLex);
-        erroreslexicos.add(new Exception_ ("Léxico","El caracter : '"+yytext()+"' no pertenece al lenguaje StatPy Convertor", Integer.toString(yyline), Integer.toString(yycolumn+1)));
-            } 
-            // fall through
-          case 25: break;
-          case 2: 
-            { return new Symbol(sym.PAR_IZQ, yyline, yycolumn,yytext());
-            } 
-            // fall through
-          case 26: break;
-          case 3: 
-            { return new Symbol(sym.PAR_DER, yyline, yycolumn,yytext());
-            } 
-            // fall through
-          case 27: break;
-          case 4: 
-            { return new Symbol(sym.CHR_IZQ, yyline, yycolumn,yytext());
-            } 
-            // fall through
-          case 28: break;
-          case 5: 
-            { return new Symbol(sym.CHR_DER, yyline, yycolumn,yytext());
-            } 
-            // fall through
-          case 29: break;
-          case 6: 
-            { return new Symbol(sym.COR_IZQ, yyline, yycolumn,yytext());
-            } 
-            // fall through
-          case 30: break;
-          case 7: 
-            { return new Symbol(sym.COR_DER, yyline, yycolumn,yytext());
-            } 
-            // fall through
-          case 31: break;
-          case 8: 
-            { return new Symbol(sym.PTCOMA, yyline, yycolumn,yytext());
-            } 
-            // fall through
-          case 32: break;
-          case 9: 
-            { return new Symbol(sym.COMILLAS, yyline, yycolumn,yytext());
-            } 
-            // fall through
-          case 33: break;
-          case 10: 
-            { return new Symbol(sym.PUNTO, yyline, yycolumn,yytext());
-            } 
-            // fall through
-          case 34: break;
-          case 11: 
-            { return new Symbol(sym.MAS, yyline, yycolumn,yytext());
-            } 
-            // fall through
-          case 35: break;
-          case 12: 
-            { return new Symbol(sym.MENOS, yyline, yycolumn,yytext());
-            } 
-            // fall through
-          case 36: break;
-          case 13: 
-            { return new Symbol(sym.POR, yyline, yycolumn,yytext());
+        erroreslexicos.add(new Exception_ ("Léxico","El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));
             } 
             // fall through
           case 37: break;
-          case 14: 
-            { return new Symbol(sym.DIV, yyline, yycolumn,yytext());
+          case 2: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.PAR_IZQ, yyline, yychar,yytext());
             } 
             // fall through
           case 38: break;
-          case 15: 
-            { return new Symbol(sym.ENTERO, yyline, yycolumn,yytext());
+          case 3: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.PAR_DER, yyline, yychar,yytext());
             } 
             // fall through
           case 39: break;
-          case 16: 
-            { /*Saltos de linea, ignorados*/
+          case 4: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.CHR_IZQ, yyline, yychar ,yytext());
             } 
             // fall through
           case 40: break;
-          case 17: 
-            { /*Espacios en blanco, ignorados*/
+          case 5: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.CHR_DER, yyline, yychar ,yytext());
             } 
             // fall through
           case 41: break;
-          case 18: 
-            { return new Symbol(sym.CADENA, yyline, yycolumn,yytext());
+          case 6: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.COR_IZQ, yyline, yychar,yytext());
             } 
             // fall through
           case 42: break;
-          case 19: 
-            { return new Symbol(sym.DECIMAL, yyline, yycolumn,yytext());
+          case 7: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.COR_DER, yyline, yychar,yytext());
             } 
             // fall through
           case 43: break;
-          case 20: 
-            { return new Symbol(sym.VOID, yyline, yycolumn,yytext());
+          case 8: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));  System.out.println(";"); return new Symbol(sym.PTCOMA, yyline, yychar ,yytext());
             } 
             // fall through
           case 44: break;
-          case 21: 
-            { return new Symbol(sym.MAIN, yyline, yycolumn,yytext());
+          case 9: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.PUNTO, yyline, yychar ,yytext());
             } 
             // fall through
           case 45: break;
-          case 22: 
-            { return new Symbol(sym.WRITE, yyline, yycolumn,yytext());
+          case 10: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.IGUAL, yyline, yychar ,yytext());
             } 
             // fall through
           case 46: break;
-          case 23: 
-            { return new Symbol(sym.REVALUAR, yyline, yycolumn,yytext());
+          case 11: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.MAS, yyline, yychar ,yytext());
             } 
             // fall through
           case 47: break;
-          case 24: 
-            { return new Symbol(sym.IMPRIMIR, yyline, yycolumn,yytext());
+          case 12: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));;   return new Symbol(sym.MENOS, yyline, yychar ,yytext());
             } 
             // fall through
           case 48: break;
+          case 13: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.POR, yyline, yychar ,yytext());
+            } 
+            // fall through
+          case 49: break;
+          case 14: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.DIV, yyline, yychar ,yytext());
+            } 
+            // fall through
+          case 50: break;
+          case 15: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.ID, yyline, yychar ,yytext());
+            } 
+            // fall through
+          case 51: break;
+          case 16: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));;   return new Symbol(sym.ENTERO, yyline, yychar ,yytext());
+            } 
+            // fall through
+          case 52: break;
+          case 17: 
+            { yychar=1;
+            } 
+            // fall through
+          case 53: break;
+          case 18: 
+            { /*Espacios en blanco, ignorados*/
+            } 
+            // fall through
+          case 54: break;
+          case 19: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.MENOR_QUE, yyline, yychar ,yytext());
+            } 
+            // fall through
+          case 55: break;
+          case 20: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.MAYOR_QUE, yyline, yychar ,yytext());
+            } 
+            // fall through
+          case 56: break;
+          case 21: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.IGUALDAD, yyline, yychar ,yytext());
+            } 
+            // fall through
+          case 57: break;
+          case 22: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.RIF, yyline, yychar,yytext());
+            } 
+            // fall through
+          case 58: break;
+          case 23: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.MENOR_IGUAL, yyline, yychar ,yytext());
+            } 
+            // fall through
+          case 59: break;
+          case 24: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.MAYOR_IGUAL, yyline, yychar ,yytext());
+            } 
+            // fall through
+          case 60: break;
+          case 25: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.PRUEBA, yyline, yychar,yytext());
+            } 
+            // fall through
+          case 61: break;
+          case 26: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.DECIMAL, yyline, yychar ,yytext());
+            } 
+            // fall through
+          case 62: break;
+          case 27: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));; return new Symbol(sym.CADENA, yyline, yychar ,yytext());
+            } 
+            // fall through
+          case 63: break;
+          case 28: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.VOID, yyline, yychar ,yytext());
+            } 
+            // fall through
+          case 64: break;
+          case 29: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.MAIN, yyline, yychar ,yytext());
+            } 
+            // fall through
+          case 65: break;
+          case 30: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.VARCHAR, yyline, yychar,yytext());
+            } 
+            // fall through
+          case 66: break;
+          case 31: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.VARBOOL, yyline, yychar,yytext());
+            } 
+            // fall through
+          case 67: break;
+          case 32: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.WRITE, yyline, yychar,yytext());
+            } 
+            // fall through
+          case 68: break;
+          case 33: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.ENCICLADO, yyline, yychar,yytext());
+            } 
+            // fall through
+          case 69: break;
+          case 34: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.VARSTRING, yyline, yychar,yytext());
+            } 
+            // fall through
+          case 70: break;
+          case 35: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.REVALUAR, yyline, yychar,yytext());
+            } 
+            // fall through
+          case 71: break;
+          case 36: 
+            { lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.IMPRIMIR, yyline, yychar,yytext());
+            } 
+            // fall through
+          case 72: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

@@ -6,15 +6,18 @@ import java.util.ArrayList;
 //PARSER 
 parser code
 {://Codigo visible
-    public static ArrayList<Exception_> Traduccion = new ArrayList<Exception_>();
+    public static ArrayList<String> Traduccion = new ArrayList<String>();
     public static ArrayList<Exception_> erroresSintacticos = new ArrayList<Exception_>(); //ArrayList del los errores sintacticos
-    
+    public static String tabuladores = "";
+    public static int reduccionDeTabulaciones = 0;
+
     public void syntax_error(Symbol s){
+
         erroresSintacticos.add(new Exception_("Sintáctico", "Error Recuperable de sintaxis: "+ s.value , Integer.toString(s.left), Integer.toString(s.right) ));
-        System.out.println("Error R de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
+        System.out.println("Error R de sintaxis: "+ s.value +" Linea "+(s.left)+" columna "+(s.right) );
     }
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
-        System.out.println("Error NR de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
+        System.out.println("Error NR de sintaxis: "+ s.value +" Linea "+(s.left)+" columna "+(s.right) );
     }
 
 :}
@@ -27,36 +30,55 @@ terminal String DECIMAL;
 terminal String UMENOS;                             // para la precedencia para los negativos y no en 
 terminal String REVALUAR;
 terminal String CADENA;
-terminal String COMILLAS;
 terminal String WRITE;
-terminal String PRUEBA;
 terminal String PUNTO;
 terminal String IMPRIMIR;
 terminal String MAIN;
 terminal String VOID;
 terminal String CHR_IZQ;
 terminal String CHR_DER;
+terminal String ID;
+terminal String IGUAL;
+terminal String RIF;
+terminal String nada;
+terminal String IGUALDAD, MENOR_QUE,MAYOR_QUE, MENOR_IGUAL, MAYOR_IGUAL;
+terminal String ENCICLADO;
+terminal String EXPRESION;
+
+
+//variables
+terminal String PRUEBA;
+terminal String VARCHAR;
+terminal String VARBOOL;
+terminal String VARSTRING;
+
+//terminal String RDOUBLE,RCHAR,RSTRING,RBOOL;
 
 
 non terminal ini;                                   // terminales para las transiciones 
 non terminal instrucciones;
 non terminal instruccion;
 non terminal Double expresion;                      // el Double es el tipo que retorna la expresion 
-non terminal sentencias;
 non terminal sentencia;
-non terminal sentencia_print;
 non terminal sumar;
-non terminal sentencia_declaracion;
-
+non terminal declaracion;
+non terminal tipoDato;
+non terminal variables;
+non terminal condicion;
+non terminal comparacion;
+non terminal sentencia_while;
+non terminal vacio;
+non terminal operaciones;
 
 precedence left MAS,MENOS;                          // precedencia de operadores 
 precedence left POR,DIV;
 precedence right UMENOS; 
-precedence right COMILLAS; 
 
 start with ini;                                     // iniciar la gramataica 
 
 ini::= VOID MAIN PAR_IZQ PAR_DER CHR_IZQ instrucciones CHR_DER;                                // produccion inicial 
+
+
 
 instrucciones ::= instrucciones instruccion
  | instruccion
@@ -64,7 +86,12 @@ instrucciones ::= instrucciones instruccion
 
 instruccion ::= sentencia PTCOMA
    | sumar PTCOMA
-   | error PTCOMA
+   | declaracion PTCOMA
+   | condicion
+   | sentencia_while
+   | vacio
+   
+    
 ;
 
 sumar::= REVALUAR COR_IZQ expresion:a COR_DER 
@@ -75,11 +102,48 @@ sumar::= REVALUAR COR_IZQ expresion:a COR_DER
 
 sentencia::= IMPRIMIR PUNTO WRITE PAR_IZQ CADENA:a PAR_DER 
 {:
-    //Traduccion.add(new Exception_("Sintáctico", "Error Recuperable de sintaxis: "+ s.value , Integer.toString(s.left), Integer.toString(s.right) ));
+    Traduccion.add(tabuladores+"print("+a+")");
     System.out.println("print("+a+")");
-    
 :}
     ;
+
+declaracion::= tipoDato ID:a IGUAL variables:b
+{:
+    Traduccion.add(tabuladores+a +" = " +b);
+    System.out.println("Declaración encontrada: "+a+" con valor: "+b) ;
+:}
+;
+
+
+//SENTENCIA WHILE
+
+sentencia_while::= ENCICLADO PAR_IZQ variables:a comparacion:b variables:c PAR_DER CHR_IZQ
+{:
+    reduccionDeTabulaciones +=1;
+    Traduccion.add(tabuladores+"while "+a+ " " +b+ " " +c);
+    tabuladores = "\t".repeat(reduccionDeTabulaciones);
+    //System.out.println("if "+a+ " " +b+ " " +c) ;
+:}
+ instrucciones CHR_DER 
+{:
+    tabuladores = tabuladores.replace("\t", "");
+    reduccionDeTabulaciones -=1;
+:}
+;
+
+
+//SENTENCIA IF
+condicion::= RIF PAR_IZQ variables:a comparacion:b variables:c PAR_DER CHR_IZQ
+{:
+    Traduccion.add(tabuladores+"if "+a+ " " +b+ " " +c);
+    tabuladores += "\t";
+    System.out.println(tabuladores+"if "+a+ " " +b+ " " +c) ;
+:}
+ instrucciones CHR_DER 
+{:
+    tabuladores = " ";
+:}
+;
 
 
 expresion  ::= 
@@ -90,8 +154,39 @@ expresion  ::=
  |  expresion:a DIV   expresion:b     {:RESULT=a/b;:}
  |  ENTERO:a                               {:RESULT=new Double(a);:}
  |  DECIMAL:a                              {:RESULT=new Double(a);:}
- |  PAR_IZQ expresion:a PAR_DER              {:RESULT=a;:}
- |  CADENA:a        
+ |  PAR_IZQ expresion:a PAR_DER              {:RESULT=a;:}     
+
+;
+
+variables::=  
+ENTERO:a {: RESULT = a; :}
+| DECIMAL:a {: RESULT = a; :}
+| CADENA:a {: RESULT = a;:}
+| ENTERO:a operaciones variables 
+| ID:a {: RESULT = a;:}
+;
+
+operaciones ::=
+    MAS
+    | MENOS
+    | POR
+    | DIV
+;
+
+tipoDato::=
+ REVALUAR:a {: RESULT = a; :}
+| PRUEBA:a {: RESULT = a; :}
+| VARCHAR:a {: RESULT = a; :}
+| VARBOOL:a {: RESULT = a; :}
+| VARSTRING:a {: RESULT = a; :}
+;
+
+comparacion::=
+ IGUALDAD:a {: RESULT = a; :}
+| MENOR_QUE:a {: RESULT = a; :}
+| MAYOR_QUE:a {: RESULT = a; :}
+| MENOR_IGUAL:a {: RESULT = a; :}
+| MAYOR_IGUAL:a {: RESULT = a; :}
 ;
 
 
