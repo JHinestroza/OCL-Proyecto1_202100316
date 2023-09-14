@@ -343,6 +343,7 @@ comparativa::=
 ;
 
 
+
 JSON::= CHR_IZQ sentencias_json CHR_DER  {:
 System.out.println("HE Recibido un JSON");
 :};
