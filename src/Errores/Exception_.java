@@ -13,7 +13,6 @@ public class Exception_  {
     private String columna;
 
     // constructor
-
     public Exception_(String tipo, String descripcion, String linea, String columna) {
         this.tipo = tipo;
         this.descripcion = descripcion;
@@ -21,6 +20,7 @@ public class Exception_  {
         this.columna = columna;
     }
 
+  
     // getters 
 
     public String getTipo() {

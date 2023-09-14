@@ -10,6 +10,7 @@ import Analizador.parser;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import Graficas.Graficas;
 
 
 /**
@@ -49,6 +50,11 @@ public class Menu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         Archivo.setText("Archivo");
+        Archivo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ArchivoActionPerformed(evt);
+            }
+        });
 
         Analizar.setText("Analizar");
 
@@ -160,6 +166,12 @@ public class Menu extends javax.swing.JFrame {
         Ejecutar();
     }//GEN-LAST:event_ReporteActionPerformed
 
+    private void ArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArchivoActionPerformed
+        Graficas grafica = new Graficas();
+        String texto = grafica.Grafica();
+        Entrada.setText(texto);
+    }//GEN-LAST:event_ArchivoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -212,9 +224,9 @@ public class Menu extends javax.swing.JFrame {
             if (scanner.erroreslexicos.isEmpty()) {
                 System.out.println("no se encontraron errores lexicos");
             } else {
-
+                
                 scanner.erroreslexicos.forEach((error) -> {
-                    System.out.println(error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna() + "\n");
+                    //System.out.println(error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna() + "\n");
                     String textoAgregado = error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna() + "\n";
                     panel.append(textoAgregado);
                 });
@@ -225,7 +237,7 @@ public class Menu extends javax.swing.JFrame {
                 parser.erroresSintacticos.forEach((error) -> {
                     String textoAgregado = error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna() + "\n";
                     panel.append(textoAgregado);
-                    System.out.println(error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna());
+                    //System.out.println(error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna());
                 });
             }
 
@@ -314,7 +326,7 @@ public class Menu extends javax.swing.JFrame {
                 writer.write("</tr>");
                 writer.newLine();
             }
-            System.out.println("tamano es  "+ scanner.lexemas.size());
+            //System.out.println("tamano es  "+ scanner.lexemas.size());
             for (int i = 0; i < scanner.lexemas.size(); i++) {
                 writer.write("<tr>");
                 writer.newLine();

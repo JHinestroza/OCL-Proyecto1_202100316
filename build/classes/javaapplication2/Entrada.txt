@@ -13,3 +13,22 @@ void main () {
 
 //scanner.erroreslexicos.clear();
             //scanner.erroreslexicos.clear();
+
+void main () {
+  Console.Write("ASDASDAD");
+  int a =1*5+3;
+  if (b > a){
+    int a =1;
+    if (b > a){
+        int a =1;
+  }
+int a = 3;
+}
+while(a < 10){
+Console.Write("el valor de a es: ");
+if (b > a){
+     int a =1;
+  }
+}
+
+}
