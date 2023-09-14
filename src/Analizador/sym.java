@@ -11,53 +11,55 @@ public class sym {
   public static final int PAR_DER = 4;
   public static final int POR = 9;
   public static final int IMPRIMIR = 18;
-  public static final int VARDOUBLE = 52;
+  public static final int VARDOUBLE = 54;
   public static final int ENTERO = 11;
-  public static final int DIFERENTE = 32;
+  public static final int DIFERENTE = 33;
   public static final int CHR_IZQ = 21;
   public static final int DOSPT = 45;
   public static final int COR_DER = 6;
+  public static final int FOR = 49;
   public static final int WRITE = 16;
-  public static final int nada = 26;
-  public static final int AND = 34;
+  public static final int AND = 35;
+  public static final int EJEY = 27;
+  public static final int EJEX = 26;
   public static final int IGUAL = 24;
-  public static final int IGUALDAD = 27;
-  public static final int OR = 33;
+  public static final int IGUALDAD = 28;
+  public static final int OR = 34;
   public static final int COMMA = 41;
-  public static final int BOOLFAL = 40;
+  public static final int BOOLFAL = 39;
   public static final int DIV = 10;
-  public static final int VARCHAR = 49;
+  public static final int VARCHAR = 51;
   public static final int MAIN = 19;
   public static final int UMENOS = 13;
   public static final int ID = 23;
   public static final int REVALUAR = 14;
+  public static final int RDO = 48;
   public static final int EOF = 0;
   public static final int DECIMAL = 12;
-  public static final int COMENTAR = 36;
-  public static final int PRUEBA = 48;
+  public static final int PRUEBA = 50;
   public static final int error = 1;
-  public static final int DESIF = 38;
+  public static final int DESIF = 37;
   public static final int CADENA = 15;
+  public static final int NEGACION = 40;
   public static final int MENOS = 8;
-  public static final int MAYOR_QUE = 29;
+  public static final int MAYOR_QUE = 30;
   public static final int PAR_IZQ = 3;
   public static final int CHR_DER = 22;
   public static final int VOID = 20;
-  public static final int ENCICLADO = 35;
-  public static final int VARBOOL = 50;
+  public static final int ENCICLADO = 36;
+  public static final int VARBOOL = 52;
   public static final int TITLE = 47;
   public static final int RCASE = 43;
   public static final int PUNTO = 17;
-  public static final int VARSTRING = 51;
-  public static final int MAYOR_IGUAL = 31;
+  public static final int VARSTRING = 53;
+  public static final int MAYOR_IGUAL = 32;
   public static final int COR_IZQ = 5;
   public static final int PTCOMA = 2;
   public static final int RSWITCH = 42;
-  public static final int BOOLTRUE = 39;
-  public static final int MENOR_QUE = 28;
-  public static final int MENOR_IGUAL = 30;
+  public static final int BOOLTRUE = 38;
+  public static final int MENOR_QUE = 29;
+  public static final int MENOR_IGUAL = 31;
   public static final int RBREAK = 44;
-  public static final int EXPRESION = 37;
   public static final int RIF = 25;
   public static final int DEFECTO = 46;
   public static final int MAS = 7;
@@ -88,7 +90,8 @@ public class sym {
   "ID",
   "IGUAL",
   "RIF",
-  "nada",
+  "EJEX",
+  "EJEY",
   "IGUALDAD",
   "MENOR_QUE",
   "MAYOR_QUE",
@@ -98,11 +101,10 @@ public class sym {
   "OR",
   "AND",
   "ENCICLADO",
-  "COMENTAR",
-  "EXPRESION",
   "DESIF",
   "BOOLTRUE",
   "BOOLFAL",
+  "NEGACION",
   "COMMA",
   "RSWITCH",
   "RCASE",
@@ -110,6 +112,8 @@ public class sym {
   "DOSPT",
   "DEFECTO",
   "TITLE",
+  "RDO",
+  "FOR",
   "PRUEBA",
   "VARCHAR",
   "VARBOOL",

@@ -7,12 +7,17 @@ import java.util.HashMap;
 //PARSER 
 parser code
 {://Codigo visible
-    HashMap<String, Double> miHashMap = new HashMap<>();
     public static ArrayList<String> Traduccion = new ArrayList<String>();
+    public static ArrayList<String> Grafica = new ArrayList<String>();
+    public static ArrayList<String> Valores = new ArrayList<String>();
     public static ArrayList<Exception_> erroresSintacticos = new ArrayList<Exception_>(); //ArrayList del los errores sintacticos
     public static String tabuladores = "";
     public static int reduccionDeTabulaciones = 0;
     public static String else_ = "";
+    public static String title = "";
+    public static String ejex = "";
+    public static String ejey = "";
+
 
     public void syntax_error(Symbol s){
 
@@ -42,16 +47,17 @@ terminal String CHR_DER;
 terminal String ID;
 terminal String IGUAL;
 terminal String RIF;
-terminal String nada;
+terminal String EJEX, EJEY;
+
 terminal String IGUALDAD, MENOR_QUE,MAYOR_QUE, MENOR_IGUAL, MAYOR_IGUAL, DIFERENTE, OR, AND;
 terminal String ENCICLADO;
-terminal String COMENTAR;
-terminal String EXPRESION;
 terminal String DESIF;
-terminal String BOOLTRUE,BOOLFAL; 
+terminal String BOOLTRUE,BOOLFAL, NEGACION; 
 terminal String COMMA; 
 terminal String RSWITCH ,RCASE ,RBREAK, DOSPT, DEFECTO;
-terminal TITLE;
+terminal String TITLE;
+terminal String RDO;
+terminal String FOR;
 
 //variables
 terminal String PRUEBA;
@@ -66,12 +72,11 @@ terminal String VARDOUBLE;
 non terminal ini;                                   // terminales para las transiciones 
 non terminal instrucciones;
 non terminal instruccion;
-non terminal expresion;                      // el Double es el tipo que retorna la expresion 
+non terminal expresion;                     
 non terminal sentencia;
 non terminal sumar;
 non terminal declaracion;
 non terminal tipoDato;
-non terminal variables;
 non terminal condicion;
 non terminal comparacion;
 non terminal sentencia_while;
@@ -80,34 +85,40 @@ non terminal operaciones;
 non terminal inicio;
 non terminal comentario;
 non terminal Sentencia_else;
-non terminal Impresion;
 non terminal sentencia_if;
 non terminal else_simple;
 non terminal sentencia_switch;
 non terminal CASES;
 non terminal CASO;
 non terminal JSON;
-non terminal sentencias_json;
-non terminal compara_if;
+non terminal sentencias_json, sentencia_json;
+non terminal logica;
+non terminal INSTANCIA;
+non terminal DO_WHILE;
+non terminal CICLO_FOR;
+non terminal comparativa;
+non terminal CONBREAK;
+non terminal Variables_globales;    
+
 
 precedence left MAS,MENOS;                          // precedencia de operadores 
 precedence left POR,DIV;
-precedence right UMENOS; 
+precedence left IGUAL; 
+precedence right UMENOS ; 
 precedence right COMMA; 
+precedence left IGUALDAD,MENOR_QUE, MAYOR_QUE, MENOR_IGUAL, MAYOR_IGUAL,DIFERENTE, OR , AND,NEGACION;
 
 
 start with ini;                                     // iniciar la gramataica 
 
-//ini::= VOID MAIN PAR_IZQ PAR_DER CHR_IZQ instrucciones CHR_DER;                                // produccion inicial 
-
+          
 ini::= inicio;
 
 inicio ::=  comentario
     | JSON
-    | VOID MAIN PAR_IZQ PAR_DER CHR_IZQ instrucciones CHR_DER
+    | VOID MAIN PAR_IZQ PAR_DER CHR_IZQ instrucciones CHR_DER {: tabuladores =""; reduccionDeTabulaciones= 0; :}
     
 ;
-
 
 instrucciones ::= instrucciones instruccion
  | instruccion
@@ -120,9 +131,12 @@ instruccion ::= sentencia PTCOMA
    | sentencia_while
    | vacio
    | Sentencia_else
-   | comentario
-   | nada
    | sentencia_switch
+   | INSTANCIA PTCOMA
+   | DO_WHILE
+   | CICLO_FOR
+   | CONBREAK
+
       
 ;
 
@@ -132,7 +146,7 @@ sumar::= REVALUAR COR_IZQ expresion:a COR_DER
 :}
     ;
 
-sentencia::= IMPRIMIR PUNTO WRITE PAR_IZQ Impresion:a PAR_DER 
+sentencia::= IMPRIMIR PUNTO WRITE PAR_IZQ expresion:a PAR_DER 
 {:
     Traduccion.add(tabuladores+"print("+a+")");
     //System.out.println("print("+a+")");
@@ -140,20 +154,24 @@ sentencia::= IMPRIMIR PUNTO WRITE PAR_IZQ Impresion:a PAR_DER
     ;
 
 //DECLARACION VARIABLES
-declaracion::= tipoDato ID:a IGUAL Impresion:b
+declaracion::= tipoDato expresion:b
 {:
-    Traduccion.add(tabuladores+a +" = " +b);
+    Traduccion.add(tabuladores+b);
     //System.out.println("Declaración encontrada: "+a+" con valor: "+b) ;
 :}
 ;
-
+INSTANCIA::= ID:a IGUAL expresion:b
+    {:
+        Traduccion.add(tabuladores+a +" = " +b);
+    :}
+;
 
 //SENTENCIA WHILE
 
-sentencia_while::= ENCICLADO PAR_IZQ variables:a comparacion:b variables:c PAR_DER CHR_IZQ
+sentencia_while::= ENCICLADO PAR_IZQ expresion:a PAR_DER CHR_IZQ
 {:
     reduccionDeTabulaciones +=1;
-    Traduccion.add(tabuladores+"while "+a+ " " +b+ " " +c);
+    Traduccion.add(tabuladores+"while "+a);
     tabuladores = "\t".repeat(reduccionDeTabulaciones);
     //System.out.println("if "+a+ " " +b+ " " +c) ;
 :}
@@ -164,15 +182,39 @@ sentencia_while::= ENCICLADO PAR_IZQ variables:a comparacion:b variables:c PAR_D
 :}
 ;
 
+//DO WHILE
 
-//SENTENCIA IF
-compara_if ::= Impresion;
+DO_WHILE::= RDO CHR_IZQ {:
+    reduccionDeTabulaciones +=1;
+    Traduccion.add(tabuladores+"while true");
+    tabuladores = "\t".repeat(reduccionDeTabulaciones);
+:}
+instrucciones CHR_DER ENCICLADO PAR_IZQ expresion:a PAR_DER PTCOMA
+{:
+    tabuladores = tabuladores.replaceFirst("\t", "");
+    reduccionDeTabulaciones -=1;
+:};
 
 
-condicion::= RIF PAR_IZQ variables:a comparacion:b variables:c PAR_DER CHR_IZQ 
+//FOR
+CICLO_FOR::= FOR PAR_IZQ PRUEBA ID:a comparativa ENTERO:b PTCOMA ID comparativa ENTERO:c PTCOMA ID MAS MAS PAR_DER CHR_IZQ 
 {:
     reduccionDeTabulaciones +=1;
-    Traduccion.add(tabuladores+else_+"if "+a+ " " +b+ " " +c);
+    Traduccion.add(tabuladores+"for "+a+" in "+" range "+"("+b+","+c+")");
+    tabuladores = "\t".repeat(reduccionDeTabulaciones);
+:}
+ instrucciones CHR_DER {:
+    tabuladores = tabuladores.replaceFirst("\t", "");
+    reduccionDeTabulaciones -=1;
+:}
+;
+
+
+//SENTENCIA IF
+condicion::= RIF PAR_IZQ expresion:a PAR_DER CHR_IZQ 
+{:
+    reduccionDeTabulaciones +=1;
+    Traduccion.add(tabuladores+else_+"if "+a);
     tabuladores = "\t".repeat(reduccionDeTabulaciones);
     else_ = "";
     //System.out.println(tabuladores+"if "+a+ " " +b+ " " +c) ;
@@ -195,6 +237,7 @@ sentencia_if
 
 sentencia_if ::= condicion 
     |else_simple
+    | Sentencia_else
 ;
 
 else_simple::= CHR_IZQ
@@ -217,7 +260,7 @@ else_simple::= CHR_IZQ
 
 
 //SETENCIA SWITCH
-sentencia_switch ::= RSWITCH PAR_IZQ Impresion:a PAR_DER CHR_IZQ
+sentencia_switch ::= RSWITCH PAR_IZQ expresion:a PAR_DER CHR_IZQ
 {:
     reduccionDeTabulaciones +=1;
     Traduccion.add("match "+a);
@@ -228,36 +271,17 @@ CASES CHR_DER{:
     reduccionDeTabulaciones -=1;
 :};
 
-CASO::= RCASE variables:a DOSPT{:
+CASO::= RCASE expresion:a DOSPT {:
     Traduccion.add("case "+a);
 :}
 ;
 
 CASES ::=
-    CASO  instrucciones RBREAK PTCOMA CASES
-    | CASO instrucciones RBREAK PTCOMA
-    //| DEFECTO instrucciones RBREAK PTCOMA
+    CASO instrucciones  CASES
+    | CASO instrucciones  
+    | DEFECTO DOSPT {:Traduccion.add("default"); :}instrucciones 
 ;
-
-
-comentario ::= COMENTAR;
-
-expresion  ::=  
-    expresion:a MAS        expresion:b     {:RESULT= a +"+"+ b;:}
- |  expresion:a MENOS      expresion:b     {:RESULT=a +"-"+b;:}
- |  expresion:a POR        expresion:b     {:RESULT=a+"*"+b;:}
- |  expresion:a DIV   expresion:b          {:RESULT=a+"/"+b;:}
- |  ENTERO:a                               {:RESULT=a;:}
- |  DECIMAL:a                              {:RESULT=a;:}
- |  PAR_IZQ expresion:a PAR_DER            {:RESULT=a;:}     
-;
-
-variables::=  
- CADENA:a {: RESULT = a;:}
-| ID:a {: RESULT = a;:}
-| expresion:a {: RESULT = a;:}
-//| ENTERO:a {: RESULT = a;:}
-;
+CONBREAK::= RBREAK PTCOMA;
 
 
 tipoDato::=
@@ -271,42 +295,78 @@ tipoDato::=
 | VARDOUBLE:a {: RESULT = a; :}
 ;
 
+expresion ::= operaciones:a                              {:RESULT = a;:}
+            |  comparacion:a                              {:RESULT = a;:}
+            |  ENTERO:a                                     {:RESULT = a;:}
+            |  DECIMAL:a                                    {:RESULT = a;:}
+            |  VARBOOL:a                                    {:RESULT = a;:}
+            |  logica:a                                     {:RESULT = a;:}
+            |  ID:a                                         {: RESULT = a;:}  
+            |  BOOLTRUE:a                                   {: RESULT = a;:} 
+            |  BOOLFAL:a                                    {: RESULT = a;:} 
+            |  CADENA:a                                     {: RESULT = a;:}           
+            |  PAR_IZQ expresion:e PAR_DER                  {:RESULT = e;:}
+                       
+;    
 
-comparacion::=
- IGUALDAD:a     {: RESULT = a; :}
-| MENOR_QUE:a   {: RESULT = a; :}
-| MAYOR_QUE:a   {: RESULT = a; :}
-| MENOR_IGUAL:a {: RESULT = a; :}
-| MAYOR_IGUAL:a {: RESULT = a; :}
-| DIFERENTE:a   {: RESULT = a;:}
-| OR            {: RESULT = "or";:}            
-| AND           {: RESULT = "and";:}
-| PAR_IZQ expresion:a PAR_DER            {:RESULT=a;:}
-| Impresion     
+operaciones ::= 
+               expresion:a MAS expresion:b              {:RESULT = a + "+" + b;:}     
+            |  expresion:a MENOS expresion:b            {:RESULT = a + "-" + b;:}                     
+            |  expresion:a POR expresion:b              {:RESULT = a + "*" + b;:}  
+            |  expresion:a DIV expresion:b              {:RESULT = a + "/" + b;:}
+            |  expresion:a IGUAL expresion:b            {:RESULT = a + "=" + b;:}
+            |  expresion:a COMMA expresion:b            {:RESULT = a + "," + b;:}
+            ;
+
+comparacion ::= 
+               expresion:a IGUALDAD:l expresion:b         {:RESULT = a + l + b;:}
+            |  expresion:a MAYOR_QUE:l expresion:b        {:RESULT = a + l + b;:}
+            |  expresion:a MENOR_QUE:l expresion:b        {:RESULT = a + l + b;:}
+            |  expresion:a MENOR_IGUAL:l expresion:b      {:RESULT = a + l + b;:}
+            |  expresion:a MAYOR_IGUAL:l expresion:b      {:RESULT = a + l + b;:}
+            |  expresion:a DIFERENTE:l expresion:b        {:RESULT = a + l + b;:}
 ;
 
-Impresion  ::=  
-    Impresion:a MAS  Impresion:b  {:RESULT= a +"+"+ b;:}
- |  Impresion:a MENOS      Impresion:b     {:RESULT=a +"-"+b;:}
- |  Impresion:a POR        Impresion:b     {:RESULT=a+"*"+b;:}
- |  Impresion:a DIV   Impresion:b          {:RESULT=a+"/"+b;:}
- |  ENTERO:b                      {:RESULT=b;:}
- |  DECIMAL:b                     {:RESULT=b;:}    
- |  ID:b                          {:RESULT=b;:}  
- |  CADENA:a                      {: RESULT = a;:}
-
+logica ::= 
+           expresion:a OR:l expresion:b      {:RESULT = a + l + b;:}
+        |  expresion:a AND:l expresion:b     {:RESULT = a + l + b;:}
+        |  NEGACION:l expresion:b {:RESULT =  l + b;:}
 ;
+
+comparativa::=
+               IGUAL:a            {:RESULT = a;:}
+            |  MAYOR_QUE:a        {:RESULT = a;:}
+            |  MENOR_QUE:a        {:RESULT = a;:}
+            |  MENOR_IGUAL:a      {:RESULT = a;:}
+            |  MAYOR_IGUAL:a      {:RESULT = a;:}
+            |  DIFERENTE:a        {:RESULT = a;:}
+;
+
 
 JSON::= CHR_IZQ sentencias_json CHR_DER  {:
 System.out.println("HE Recibido un JSON");
 :};
 
-sentencias_json::= TITLE DOSPT CADENA;
+
+sentencias_json ::= sentencia_json
+          | sentencia_json COMMA sentencias_json        
+;
+
+
+sentencia_json::= TITLE DOSPT CADENA:a {: title = a;  :}
+| EJEX DOSPT CADENA:a {: ejex = a;  :}
+| EJEY  DOSPT CADENA:a {: ejey = a;  :}
+| CADENA DOSPT CADENA:a {: Grafica.add(a);  :}
+| CADENA DOSPT DECIMAL:a {: Valores.add(a);  :}
+;
+
+
+Variables_globales::= VOID;
 
 
 
 
-nada::=;
+
 
 /*
 Definición de regla:

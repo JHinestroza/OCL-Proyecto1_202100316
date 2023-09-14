@@ -42,9 +42,8 @@ DIV = "/"
 DIFERENTE = "!="
 COMMA = ","
 DOSPT = ":"
-TITLE = "\"Titulo\""
-EJEX = "EjeX"
-EJEY = "EjeY"
+
+
 
 
 //palabras reservadas
@@ -58,7 +57,8 @@ CADENA = [\"][^\"\n]+[\"]
 SPACE   = [\ \r\t\f\t]
 ENTER   = [\ \n]
 ID = [a-zA-Z_][a-zA-Z0-9_]*
-COMENTAR = "//" .* ("\n"|"")
+COMENTAR =  "//"([^\r\n]*)
+COM_MULT = [/][*][^*]*[*]+([^/*][^*]*[*]+)*[/]
 
 //RESERVADAS
 VOID = "void"
@@ -83,10 +83,16 @@ REVALUAR = "Evaluar"
 ENCICLADO = "while"
 OR = "||"
 AND = "&&"
+NEGACION = "!"
 RSWITCH = "switch"
 RCASE = "case"
 RBREAK = "break"
-
+DEFECTO = "default"
+RDO = "do"
+FOR = "for"
+TITLE = "\"Titulo\""
+EJEX = "\"EjeX\""
+EJEY = "\"EjeY\""
 
 %%
 
@@ -115,6 +121,13 @@ RBREAK = "break"
 <YYINITIAL> {RBREAK}  {lexemas.add(new Tokems(yytext(),"RBREAK", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.RBREAK, yyline, yychar ,yytext());}
 <YYINITIAL> {TITLE}  {lexemas.add(new Tokems(yytext(),"TITLE", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.TITLE, yyline, yychar ,yytext());}
 <YYINITIAL> {VARDOUBLE}  {lexemas.add(new Tokems(yytext(),"VARDOUBLE", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.VARDOUBLE, yyline, yychar ,yytext());}
+<YYINITIAL> {NEGACION}  {lexemas.add(new Tokems(yytext(),"NEGACION", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.NEGACION, yyline, yychar ,yytext());}
+<YYINITIAL> {DEFECTO}  {lexemas.add(new Tokems(yytext(),"DEFECTO", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.DEFECTO, yyline, yychar ,yytext());}
+<YYINITIAL> {RDO}  {lexemas.add(new Tokems(yytext(),"RDO", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.RDO, yyline, yychar ,yytext());}
+<YYINITIAL> {FOR}  {lexemas.add(new Tokems(yytext(),"FOR", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.FOR, yyline, yychar ,yytext());}
+<YYINITIAL> {EJEX}  {lexemas.add(new Tokems(yytext(),"EJEX", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.EJEX, yyline, yychar ,yytext());}
+<YYINITIAL> {EJEY}  {lexemas.add(new Tokems(yytext(),"EJEY", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.EJEY, yyline, yychar ,yytext());}
+
 
 
 
@@ -129,10 +142,9 @@ RBREAK = "break"
 <YYINITIAL> {DOSPT} {lexemas.add(new Tokems(yytext(),"DOSPT", Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.DOSPT, yyline, yychar ,yytext());}
 
 
-<YYINITIAL> {COMENTAR}   {lexemas.add(new Tokems(yytext(),"Comentario", Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.COMENTAR, yyline, yychar ,yytext());   }
-
+<YYINITIAL> {COMENTAR}   {lexemas.add(new Tokems(yytext(),"Comentario", Integer.toString(yyline), Integer.toString(yychar)));}
+<YYINITIAL> {COM_MULT}  {lexemas.add(new Tokems(yytext(),"EJEY", Integer.toString(yyline), Integer.toString(yychar)));}
 <YYINITIAL> {ENTERO}    {lexemas.add(new Tokems(yytext(),"ENTERO", Integer.toString(yyline), Integer.toString(yychar)));;   return new Symbol(sym.ENTERO, yyline, yychar ,yytext());   }
-
 <YYINITIAL> {DECIMAL}   {lexemas.add(new Tokems(yytext(),"DECIMAL", Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.DECIMAL, yyline, yychar ,yytext());  }
 
 <YYINITIAL> {SPACE}     { /*Espacios en blanco, ignorados*/ }
@@ -140,8 +152,6 @@ RBREAK = "break"
 \n {yychar=1;}
 
 <YYINITIAL> {CADENA}     {lexemas.add(new Tokems(yytext(),"CADENA", Integer.toString(yyline), Integer.toString(yychar)));; return new Symbol(sym.CADENA, yyline, yychar ,yytext());}
-
-"[A-Za-z]+"    {lexemas.add(new Tokems(yytext(),"El caracter : '"+yytext(), Integer.toString(yyline), Integer.toString(yychar)));; return new Symbol(sym.EXPRESION, yyline, yychar ,yytext());}
 
 <YYINITIAL> {PUNTO}     {lexemas.add(new Tokems(yytext(),"PUNTO", Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.PUNTO, yyline, yychar ,yytext());}
 
