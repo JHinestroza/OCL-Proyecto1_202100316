@@ -17,6 +17,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import Analizador.parser;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import javax.swing.JOptionPane;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.ChartPanel;
@@ -32,12 +33,68 @@ import org.jfree.data.general.DefaultPieDataset;
  * @author jose_
  */
 public class Graficas {
-    
+
     public static LinkedList<String> traduccion = new LinkedList<>();
-    
+
+    public static void Graficar(String titulo, String tituloX, String tituloY, Object ejes, Object valores) {
+
+        String[] textoejes = ejes.toString().split(",");
+
+        String[] textovalores = valores.toString().split(",");
+        DefaultCategoryDataset datos = new DefaultCategoryDataset();
+        for (int i = 0; i < textoejes.length; i++) {
+            //System.out.println(textovalores[i]);
+            datos.addValue(Double.valueOf(textovalores[i]), textoejes[i], textoejes[i]);
+
+        }
+        JFreeChart chart = ChartFactory.createBarChart(
+                titulo, // Título
+                tituloX, // Etiqueta del eje X
+                tituloY, // Etiqueta del eje Y
+                datos, // Datos
+                PlotOrientation.VERTICAL, // Orientación de la gráfica
+                true, // Mostrar leyenda
+                true, // Usar tooltips
+                false // Usar URLs
+        );
+
+        ChartFrame frame = new ChartFrame("Ejemplo", chart);
+        frame.setPreferredSize(new java.awt.Dimension(400, 500));
+        frame.pack();
+        frame.setVisible(true);;
+
+    }
+
+    public static void GraficarPie(String titulo, String tituloX, String tituloY, Object ejes, Object valores) {
+
+        String[] textoejes = ejes.toString().split(",");
+        String[] textovalores = valores.toString().split(",");
+        DefaultCategoryDataset datos = new DefaultCategoryDataset();
+
+        DefaultPieDataset dataset = new DefaultPieDataset();
+
+        for (int i = 0; i < textoejes.length; i++) {
+
+            dataset.setValue(textoejes[i], Double.valueOf(textovalores[i]));
+        }
+        // Creación de gráfica
+
+        JFreeChart grafica = ChartFactory.createPieChart(titulo, dataset, true, true, true);
+        PiePlot plot = (PiePlot) grafica.getPlot();
+        plot.setSimpleLabels(true);
+        //PieSectionLabelGenerator generator = new StandardPieSectionLabelGenerator(tituloY, numberFormat, percentFormat);
+        //plot.setLabelGenerator(generator);
+
+        // Mostrar
+        ChartFrame frame = new ChartFrame("Ejemplo", grafica);
+        frame.setPreferredSize(new java.awt.Dimension(400, 500));
+        frame.pack();
+        frame.setVisible(true);;
+    }
+
     public static String Grafica() {
         JFileChooser fileChooser = new JFileChooser();
-        
+
         // Establecer un filtro de extensión para archivos JSON
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos JSON (*.json)", "json", "Archivos SP (*.sp)", "sp");
         fileChooser.setFileFilter(filter);
@@ -51,21 +108,27 @@ public class Graficas {
             // Verificar que el archivo seleccionado sea JSON (opcional)
             if (selectedFile.getName().endsWith(".json")) {
                 // Procesar el archivo JSON seleccionado aquí
-                String codigo = LecturaJSON(selectedFile.getPath());
+                String codigo = Lectura(selectedFile.getPath());
+                //System.out.println("Archivo JSON seleccionado: " + selectedFile.getAbsolutePath());
+                return codigo;
+            }
+            if (selectedFile.getName().endsWith(".sp")) {
+                // Procesar el archivo JSON seleccionado aquí
+                String codigo = Lectura(selectedFile.getPath());
                 //System.out.println("Archivo JSON seleccionado: " + selectedFile.getAbsolutePath());
                 return codigo;
             } else {
                 System.out.println("El archivo seleccionado no es un archivo JSON válido.");
             }
         } else {
-            System.out.println("No se seleccionó ningún archivo.");
+            JOptionPane.showMessageDialog(null, "No ha seleccionado ningun archivo", "Alerta", JOptionPane.WARNING_MESSAGE);
+
             return "";
         }
         return "";
     }
-    
 
-    public static String LecturaJSON(String selectedFile) {
+    public static String Lectura(String selectedFile) {
         try {
             // Crear un lector de archivos
             FileReader fileReader = new FileReader(selectedFile);
@@ -75,7 +138,7 @@ public class Graficas {
             StringBuilder jsonText = new StringBuilder();
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                jsonText.append(line+"\n");
+                jsonText.append(line + "\n");
             }
 
             // Cerrar el lector de archivos
@@ -85,20 +148,20 @@ public class Graficas {
             String jsonContent = jsonText.toString();
 
             // Imprimir el texto
-            System.out.println("Texto extraído del JSON:\n" + jsonContent);
             return jsonContent;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return "";
     }
-    public  void GraficaBarras(){
+
+    public void GraficaBarras() {
         String titulo = parser.title;
         String tituloX = parser.ejex;
         String tituloY = parser.ejey;
         DefaultCategoryDataset datos = new DefaultCategoryDataset();
         for (int i = 0; i < parser.Valores.size(); i++) {
-            
+
             datos.addValue(Double.valueOf(parser.Valores.get(i)), parser.Grafica.get(i), parser.Grafica.get(i));
         }
         JFreeChart chart = ChartFactory.createBarChart(
@@ -111,42 +174,37 @@ public class Graficas {
                 true, // Usar tooltips
                 false // Usar URLs
         );
-        
-        
+
         ChartFrame frame = new ChartFrame("Ejemplo", chart);
         frame.setPreferredSize(new java.awt.Dimension(400, 500));
         frame.pack();
         frame.setVisible(true);;
     }
-    
-    public void Pie()
-    {
+
+    public void Pie() {
         //Ingreso de datos
         String titulo = parser.title;
         String tituloX = parser.ejex;
         String tituloY = parser.ejey;
-        DefaultPieDataset dataset = new DefaultPieDataset( );
-      
-        for(int i = 0; i < parser.Valores.size(); i++){
-            
-            dataset.setValue( parser.Grafica.get(i), Double.valueOf(parser.Valores.get(i)));
+        DefaultPieDataset dataset = new DefaultPieDataset();
+
+        for (int i = 0; i < parser.Valores.size(); i++) {
+
+            dataset.setValue(parser.Grafica.get(i), Double.valueOf(parser.Valores.get(i)));
         }
         // Creación de gráfica
-        
-        JFreeChart grafica = ChartFactory.createPieChart(titulo, dataset,true,true,true);
-        PiePlot plot = (PiePlot) grafica.getPlot();    
+
+        JFreeChart grafica = ChartFactory.createPieChart(titulo, dataset, true, true, true);
+        PiePlot plot = (PiePlot) grafica.getPlot();
         plot.setSimpleLabels(true);
         //PieSectionLabelGenerator generator = new StandardPieSectionLabelGenerator(tituloY, numberFormat, percentFormat);
         //plot.setLabelGenerator(generator);
-        
-        
+
         // Mostrar
-        
         ChartFrame frame = new ChartFrame("Ejemplo", grafica);
         frame.setPreferredSize(new java.awt.Dimension(400, 500));
         frame.pack();
         frame.setVisible(true);;
     }
-    
-    
+
 }

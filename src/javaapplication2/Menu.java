@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import Graficas.Graficas;
 import Reportes.Reportes;
+import javaapplication2.Guadar;
 /**
  *
  * @author jose_
@@ -34,6 +35,7 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        popupMenu1 = new java.awt.PopupMenu();
         Archivo = new javax.swing.JButton();
         Analizar = new javax.swing.JButton();
         Ejecutar = new javax.swing.JButton();
@@ -46,6 +48,10 @@ public class Menu extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         Graficar = new javax.swing.JButton();
+        GuardarComo = new javax.swing.JButton();
+        Guardar = new javax.swing.JButton();
+
+        popupMenu1.setLabel("popupMenu1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -99,13 +105,15 @@ public class Menu extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panel1Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
-                .addGap(0, 15, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(Entrada, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(69, 69, 69)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,7 +128,7 @@ public class Menu extends javax.swing.JFrame {
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
-                .addGap(18, 18, 18)
+                .addGap(22, 22, 22)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel3))
@@ -128,13 +136,27 @@ public class Menu extends javax.swing.JFrame {
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(Salida, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
                     .addComponent(Entrada, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         Graficar.setText("Graficar");
         Graficar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GraficarActionPerformed(evt);
+            }
+        });
+
+        GuardarComo.setText("Guardar Como");
+        GuardarComo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GuardarComoActionPerformed(evt);
+            }
+        });
+
+        Guardar.setText("Guardar");
+        Guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GuardarActionPerformed(evt);
             }
         });
 
@@ -150,9 +172,13 @@ public class Menu extends javax.swing.JFrame {
                 .addComponent(Ejecutar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(Reporte, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addComponent(Graficar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 0, 0)
+                .addComponent(GuardarComo)
+                .addGap(0, 0, 0)
+                .addComponent(Guardar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -163,7 +189,9 @@ public class Menu extends javax.swing.JFrame {
                     .addComponent(Analizar)
                     .addComponent(Ejecutar)
                     .addComponent(Reporte)
-                    .addComponent(Graficar))
+                    .addComponent(Graficar)
+                    .addComponent(GuardarComo)
+                    .addComponent(Guardar))
                 .addGap(0, 0, 0)
                 .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -204,6 +232,17 @@ public class Menu extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_AnalizarActionPerformed
+
+    private void GuardarComoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarComoActionPerformed
+        Guadar guardar = new Guadar();
+        guardar.GuardarComo(Entrada.getText());
+    }//GEN-LAST:event_GuardarComoActionPerformed
+
+    private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
+        // TODO add your handling code here:
+        Guadar guardar = new Guadar();
+        guardar.Guardar(Entrada.getText());
+    }//GEN-LAST:event_GuardarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -337,7 +376,7 @@ public class Menu extends javax.swing.JFrame {
             writer.write("</tr>");
             writer.newLine();
 
-            System.out.println(scanner.lexemas.size());
+            //System.out.println(scanner.lexemas.size());
             for (int i = 0; i < scanner.lexemas.size(); i++) {
                 writer.write("<tr style=\"background-color: rgb(223, 223, 223);\" >");
                 writer.newLine();
@@ -363,7 +402,7 @@ public class Menu extends javax.swing.JFrame {
 
             // Cerrar el archivo
             writer.close();
-
+            
             System.out.println("Tabla HTML generada con éxito en " + nombreArchivo);
         } catch (IOException e) {
             e.printStackTrace();
@@ -428,7 +467,7 @@ public class Menu extends javax.swing.JFrame {
             writer.newLine();
 
             // Filas de la tabla
-            System.out.println(scanner.erroreslexicos.size());
+            //System.out.println(scanner.erroreslexicos.size());
             for (int i = 0; i < scanner.erroreslexicos.size(); i++) {
                 writer.write("<tr style=\"background-color: rgb(223, 223, 223);\">");
                 writer.newLine();
@@ -470,6 +509,8 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JButton Ejecutar;
     private java.awt.TextArea Entrada;
     private javax.swing.JButton Graficar;
+    private javax.swing.JButton Guardar;
+    private javax.swing.JButton GuardarComo;
     private javax.swing.JButton Reporte;
     private java.awt.TextArea Salida;
     private javax.swing.JLabel jLabel1;
@@ -477,5 +518,6 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private java.awt.Panel panel1;
+    private java.awt.PopupMenu popupMenu1;
     // End of variables declaration//GEN-END:variables
 }

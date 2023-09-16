@@ -9,63 +9,68 @@ package Analizador;
 public class sym {
   /* terminals */
   public static final int PAR_DER = 4;
-  public static final int CHAR = 53;
+  public static final int CHAR = 58;
   public static final int POR = 9;
   public static final int IMPRIMIR = 18;
-  public static final int VARDOUBLE = 58;
+  public static final int VARDOUBLE = 63;
   public static final int ENTERO = 11;
-  public static final int DIFERENTE = 36;
+  public static final int DIFERENTE = 41;
   public static final int CHR_IZQ = 21;
-  public static final int DOSPT = 48;
+  public static final int DOSPT = 53;
   public static final int COR_DER = 6;
-  public static final int FOR = 52;
+  public static final int FOR = 57;
   public static final int WRITE = 16;
-  public static final int AND = 38;
+  public static final int AND = 43;
   public static final int EJEY = 27;
   public static final int EJEX = 26;
   public static final int IGUAL = 24;
-  public static final int OR = 37;
-  public static final int IGUALDAD = 31;
-  public static final int COMMA = 44;
-  public static final int BOOLFAL = 42;
+  public static final int GPIE = 35;
+  public static final int OR = 42;
+  public static final int IGUALDAD = 36;
+  public static final int COMMA = 49;
+  public static final int BOOLFAL = 47;
   public static final int DIV = 10;
-  public static final int VARCHAR = 55;
+  public static final int VARCHAR = 60;
   public static final int MAIN = 19;
   public static final int UMENOS = 13;
+  public static final int TITULOG = 32;
   public static final int ID = 23;
   public static final int REVALUAR = 14;
-  public static final int RDO = 51;
+  public static final int RDO = 56;
   public static final int EOF = 0;
   public static final int DECIMAL = 12;
-  public static final int PRUEBA = 54;
+  public static final int ARREGLO = 31;
+  public static final int PRUEBA = 59;
   public static final int GBARRAS = 30;
   public static final int error = 1;
-  public static final int DESIF = 40;
+  public static final int DESIF = 45;
   public static final int CADENA = 15;
-  public static final int NEGACION = 43;
+  public static final int NEGACION = 48;
   public static final int MENOS = 8;
-  public static final int MAYOR_QUE = 33;
+  public static final int MAYOR_QUE = 38;
   public static final int GLOBAL = 28;
   public static final int PAR_IZQ = 3;
+  public static final int TITLEY = 33;
   public static final int CHR_DER = 22;
   public static final int VOID = 20;
-  public static final int ENCICLADO = 39;
-  public static final int VARBOOL = 56;
-  public static final int TITLE = 50;
-  public static final int RCASE = 46;
+  public static final int TITLEX = 34;
+  public static final int ENCICLADO = 44;
+  public static final int VARBOOL = 61;
+  public static final int TITLE = 55;
+  public static final int RCASE = 51;
   public static final int PUNTO = 17;
   public static final int GLOBALM = 29;
-  public static final int VARSTRING = 57;
-  public static final int MAYOR_IGUAL = 35;
+  public static final int VARSTRING = 62;
+  public static final int MAYOR_IGUAL = 40;
   public static final int COR_IZQ = 5;
   public static final int PTCOMA = 2;
-  public static final int RSWITCH = 45;
-  public static final int BOOLTRUE = 41;
-  public static final int MENOR_QUE = 32;
-  public static final int MENOR_IGUAL = 34;
-  public static final int RBREAK = 47;
+  public static final int RSWITCH = 50;
+  public static final int BOOLTRUE = 46;
+  public static final int MENOR_QUE = 37;
+  public static final int MENOR_IGUAL = 39;
+  public static final int RBREAK = 52;
   public static final int RIF = 25;
-  public static final int DEFECTO = 49;
+  public static final int DEFECTO = 54;
   public static final int MAS = 7;
   public static final String[] terminalNames = new String[] {
   "EOF",
@@ -99,6 +104,11 @@ public class sym {
   "GLOBAL",
   "GLOBALM",
   "GBARRAS",
+  "ARREGLO",
+  "TITULOG",
+  "TITLEY",
+  "TITLEX",
+  "GPIE",
   "IGUALDAD",
   "MENOR_QUE",
   "MAYOR_QUE",

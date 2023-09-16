@@ -3,6 +3,7 @@ import java_cup.runtime.*;
 import Errores.Exception_;
 import java.util.ArrayList;
 import java.util.HashMap;
+import Graficas.Graficas;
 
 //PARSER 
 parser code
@@ -18,6 +19,8 @@ parser code
     public static String title = "";
     public static String ejex = "";
     public static String ejey = "";
+    public static Object ejes = "";
+    public static Object valores = "";
 
 
     public void syntax_error(Symbol s){
@@ -51,6 +54,8 @@ terminal String RIF;
 terminal String EJEX, EJEY;
 terminal String GLOBAL, GLOBALM;
 terminal String GBARRAS;
+terminal String ARREGLO;
+terminal String TITULOG, TITLEY, TITLEX, GPIE;
 
 
 terminal String IGUALDAD, MENOR_QUE,MAYOR_QUE, MENOR_IGUAL, MAYOR_IGUAL, DIFERENTE, OR, AND;
@@ -107,6 +112,13 @@ non terminal Variables_globales;
 non terminal GLOBALES; 
 non terminal intrucciones_json;
 non terminal BARRAS;
+non terminal global;
+non terminal globales;
+non terminal BarrasGlobales;
+non terminal BarrasGlobal;
+non terminal Intancias;
+non terminal instancia;
+non terminal PIE;
 
 precedence left MAS,MENOS;                          // precedencia de operadores 
 precedence left POR,DIV;
@@ -152,6 +164,7 @@ instruccion ::= sentencia PTCOMA
    | CONBREAK
    | Variables_globales    
    | BARRAS
+   | PIE
 ;
 
 sumar::= REVALUAR COR_IZQ expresion:a COR_DER 
@@ -325,7 +338,8 @@ expresion ::= operaciones:a                              {:RESULT = a;:}
 ;    
 
 operaciones ::= 
-               expresion:a MAS expresion:b              {:RESULT = a + "+" + b;:}     
+               expresion:a MAS expresion:b              {:RESULT = a + "+" + b;:} 
+            |  MENOS expresion:a                        {:RESULT="-"+a;:}%prec UMENOS     
             |  expresion:a MENOS expresion:b            {:RESULT = a + "-" + b;:}                     
             |  expresion:a POR expresion:b              {:RESULT = a + "*" + b;:}  
             |  expresion:a DIV expresion:b              {:RESULT = a + "/" + b;:}
@@ -334,12 +348,12 @@ operaciones ::=
             ;
 
 comparacion ::= 
-               expresion:a IGUALDAD:l expresion:b         {:RESULT = a + l + b;:}
-            |  expresion:a MAYOR_QUE:l expresion:b        {:RESULT = a + l + b;:}
-            |  expresion:a MENOR_QUE:l expresion:b        {:RESULT = a + l + b;:}
-            |  expresion:a MENOR_IGUAL:l expresion:b      {:RESULT = a + l + b;:}
-            |  expresion:a MAYOR_IGUAL:l expresion:b      {:RESULT = a + l + b;:}
-            |  expresion:a DIFERENTE:l expresion:b        {:RESULT = a + l + b;:}
+               expresion:a IGUALDAD:signo expresion:b         {:RESULT = a + signo + b;:}
+            |  expresion:a MAYOR_QUE:signo expresion:b        {:RESULT = a + signo + b;:}
+            |  expresion:a MENOR_QUE:signo expresion:b        {:RESULT = a + signo + b;:}
+            |  expresion:a MENOR_IGUAL:signo expresion:b      {:RESULT = a + signo + b;:}
+            |  expresion:a MAYOR_IGUAL:signo expresion:b      {:RESULT = a + signo + b;:}
+            |  expresion:a DIFERENTE:signo expresion:b        {:RESULT = a + signo + b;:}
 ;
 
 logica ::= 
@@ -365,7 +379,7 @@ System.out.println("HE Recibido un JSON");
 
 
 sentencias_json ::= sentencia_json
-          | sentencia_json COMMA sentencias_json        
+          | sentencia_json COMMA sentencias_json 
 ;
 
 
@@ -376,18 +390,56 @@ sentencia_json::= TITLE DOSPT CADENA:a {: title = a;  :}
 | CADENA DOSPT DECIMAL:a {: Valores.add(a);  :}
 ;
 
-GLOBALES::= GLOBALM
-            | GLOBAL ;
+
+Variables_globales::= VOID GLOBAL PAR_IZQ PAR_DER CHR_IZQ globales CHR_DER {:System.out.println("he recibido variables globales");:};
 
 
+globales ::=  global PTCOMA
+            | global PTCOMA globales;  
 
-Variables_globales::= VOID GLOBALES PAR_IZQ PAR_DER CHR_IZQ intrucciones_json CHR_DER;
+
+global ::= VARDOUBLE ID:a IGUAL DECIMAL:b  {: mapa.put(a, b);:}
+|  VARSTRING ID:a IGUAL CADENA:b  {: mapa.put(a, b);:}
+|  VARDOUBLE ID:a IGUAL ENTERO:b  {: mapa.put(a, b);:}
+; 
 
 
-intrucciones_json ::= VARSTRING ID:a IGUAL CADENA:b  PTCOMA {: mapa.put(a, b); :}
-| VARDOUBLE ID IGUAL:a DECIMAL:b PTCOMA {: mapa.put(a, b); :}
+//GRAFICA DE BARRAS
+BARRAS::= VOID GBARRAS PAR_IZQ PAR_DER CHR_IZQ BarrasGlobales CHR_DER 
+{:  
+    //Graficas.GraficarPie(title,ejex,ejey,ejes,valores);
+    Graficas.Graficar(title,ejex,ejey,ejes,valores);
+    
+:}
 ;
 
-BARRAS::= VOID GBARRAS PAR_IZQ PAR_DER CHR_IZQ CHR_DER;
+BarrasGlobales::= BarrasGlobal PTCOMA
+                | BarrasGlobal PTCOMA BarrasGlobales
+;
 
+BarrasGlobal::= VARSTRING ARREGLO ID IGUAL CHR_IZQ Intancias:a CHR_DER {:ejes = a; :}
+                | VARDOUBLE ARREGLO ID IGUAL CHR_IZQ Intancias:a CHR_DER {:valores = a; System.out.println(a);:}
+                | VARSTRING TITULOG IGUAL CADENA:a {: title = a; :}
+                | VARSTRING TITLEY IGUAL CADENA:a {: System.out.println(a); ejey = a; :}
+                | VARSTRING TITLEX IGUAL CADENA:a {: ejex = a; :}
 
+;
+
+Intancias ::= ID:b                           {:String valor = mapa.get(b);    RESULT = valor;:} 
+            | ID:a COMMA Intancias:b         {:String valor = mapa.get(a);  RESULT = valor +","+ b;:}
+            | DECIMAL:a                      {:RESULT = a;:} 
+            | DECIMAL:a COMMA Intancias:b    {:RESULT = a +","+ b;:}
+            | CADENA:a                       {:RESULT = a;:} 
+            | CADENA:a COMMA Intancias:b     {:RESULT = a +","+ b;:}                        
+;
+ 
+
+//GRAFICA DE PIE
+PIE::= VOID GPIE PAR_IZQ PAR_DER CHR_IZQ BarrasGlobales CHR_DER 
+{:  
+    System.out.println("he entrado a graficar");
+    Graficas.GraficarPie(title,ejex,ejey,ejes,valores);
+    //Graficas.Graficar(title,ejex,ejey,ejes,valores);
+    
+:}
+;

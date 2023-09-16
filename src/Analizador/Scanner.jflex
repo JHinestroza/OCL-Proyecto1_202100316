@@ -43,6 +43,7 @@ DIFERENTE = "!="
 COMMA = ","
 DOSPT = ":"
 CHAR = [\'][a-zA-Z][\']
+ARREGLO = "[]"
 
 
 //expresiones
@@ -90,7 +91,10 @@ EJEX = "\"EjeX\""
 EJEY = "\"EjeY\""
 GLOBAL = "definirglobales"
 GBARRAS = "GraficaBarras"
-
+GPIE = "GraficaPie"
+TITLEX = "TituloX"
+TITLEY = "TituloY"
+TITULOG = "Titulo"
 
 %%
 
@@ -127,6 +131,10 @@ GBARRAS = "GraficaBarras"
 <YYINITIAL> {EJEX}  {lexemas.add(new Tokems(yytext(),"EJEX", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.EJEX, yyline, yychar ,yytext());}
 <YYINITIAL> {EJEY}  {lexemas.add(new Tokems(yytext(),"EJEY", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.EJEY, yyline, yychar ,yytext());}
 <YYINITIAL> {GBARRAS}  {lexemas.add(new Tokems(yytext(),"GBARRAS", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.GBARRAS, yyline, yychar ,yytext());}
+<YYINITIAL> {TITLEX}  {lexemas.add(new Tokems(yytext(),"TITLEX", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.TITLEX, yyline, yychar ,yytext());}
+<YYINITIAL> {TITLEY}  {lexemas.add(new Tokems(yytext(),"TITLEY", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.TITLEY, yyline, yychar ,yytext());}
+<YYINITIAL> {TITULOG}  {lexemas.add(new Tokems(yytext(),"TITULOG", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.TITULOG, yyline, yychar ,yytext());}
+<YYINITIAL> {GPIE}  {lexemas.add(new Tokems(yytext(),"GPIE", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.GPIE, yyline, yychar ,yytext());}
 
 
 
@@ -143,6 +151,7 @@ GBARRAS = "GraficaBarras"
 <YYINITIAL> {DIFERENTE}       {lexemas.add(new Tokems(yytext(),"DIFERENTE", Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.DIFERENTE, yyline, yychar ,yytext());   }
 <YYINITIAL> {COMMA}       {lexemas.add(new Tokems(yytext(),"COMMA", Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.COMMA, yyline, yychar ,yytext());}
 <YYINITIAL> {DOSPT} {lexemas.add(new Tokems(yytext(),"DOSPT", Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.DOSPT, yyline, yychar ,yytext());}
+<YYINITIAL> {ARREGLO} {lexemas.add(new Tokems(yytext(),"ARREGLO", Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.ARREGLO, yyline, yychar ,yytext());}
 
 
 <YYINITIAL> {COMENTAR}   {lexemas.add(new Tokems(yytext(),"Comentario", Integer.toString(yyline), Integer.toString(yychar)));}
