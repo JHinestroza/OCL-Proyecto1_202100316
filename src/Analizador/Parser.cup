@@ -7,6 +7,7 @@ import java.util.HashMap;
 //PARSER 
 parser code
 {://Codigo visible
+    public static HashMap<String, String> mapa = new HashMap<>();
     public static ArrayList<String> Traduccion = new ArrayList<String>();
     public static ArrayList<String> Grafica = new ArrayList<String>();
     public static ArrayList<String> Valores = new ArrayList<String>();
@@ -25,7 +26,7 @@ parser code
         System.out.println("Error R de sintaxis: "+ s.value +" Linea "+(s.left)+" columna "+(s.right) );
     }
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
-        System.out.println("Error NR de sintaxis: "+ s.value +" Linea "+(s.left)+" columna "+(s.right) );
+        System.out.println("Error NR de sintaxis: "+ s.value +" Linea "+(s.left+1)+" columna "+(s.right+1) );
     }
 :}
 
@@ -48,6 +49,9 @@ terminal String ID;
 terminal String IGUAL;
 terminal String RIF;
 terminal String EJEX, EJEY;
+terminal String GLOBAL, GLOBALM;
+terminal String GBARRAS;
+
 
 terminal String IGUALDAD, MENOR_QUE,MAYOR_QUE, MENOR_IGUAL, MAYOR_IGUAL, DIFERENTE, OR, AND;
 terminal String ENCICLADO;
@@ -58,6 +62,7 @@ terminal String RSWITCH ,RCASE ,RBREAK, DOSPT, DEFECTO;
 terminal String TITLE;
 terminal String RDO;
 terminal String FOR;
+terminal String CHAR;
 
 //variables
 terminal String PRUEBA;
@@ -98,8 +103,10 @@ non terminal DO_WHILE;
 non terminal CICLO_FOR;
 non terminal comparativa;
 non terminal CONBREAK;
-non terminal Variables_globales;    
-
+non terminal Variables_globales;   
+non terminal GLOBALES; 
+non terminal intrucciones_json;
+non terminal BARRAS;
 
 precedence left MAS,MENOS;                          // precedencia de operadores 
 precedence left POR,DIV;
@@ -116,8 +123,15 @@ ini::= inicio;
 
 inicio ::=  comentario
     | JSON
-    | VOID MAIN PAR_IZQ PAR_DER CHR_IZQ instrucciones CHR_DER {: tabuladores =""; reduccionDeTabulaciones= 0; :}
-    
+    | VOID MAIN PAR_IZQ {:
+    tabuladores =""; 
+    reduccionDeTabulaciones= 0; 
+    reduccionDeTabulaciones +=1;
+    Traduccion.add("def main: ");
+    tabuladores = "\t".repeat(reduccionDeTabulaciones);
+    :} 
+    PAR_DER CHR_IZQ instrucciones CHR_DER 
+    | error  CHR_DER
 ;
 
 instrucciones ::= instrucciones instruccion
@@ -136,8 +150,8 @@ instruccion ::= sentencia PTCOMA
    | DO_WHILE
    | CICLO_FOR
    | CONBREAK
-
-      
+   | Variables_globales    
+   | BARRAS
 ;
 
 sumar::= REVALUAR COR_IZQ expresion:a COR_DER 
@@ -263,7 +277,7 @@ else_simple::= CHR_IZQ
 sentencia_switch ::= RSWITCH PAR_IZQ expresion:a PAR_DER CHR_IZQ
 {:
     reduccionDeTabulaciones +=1;
-    Traduccion.add("match "+a);
+    Traduccion.add(tabuladores+"match "+a);
     tabuladores = "\t".repeat(reduccionDeTabulaciones);
 :}
 CASES CHR_DER{:
@@ -272,14 +286,14 @@ CASES CHR_DER{:
 :};
 
 CASO::= RCASE expresion:a DOSPT {:
-    Traduccion.add("case "+a);
+    Traduccion.add(tabuladores+"case "+a);
 :}
 ;
 
 CASES ::=
     CASO instrucciones  CASES
     | CASO instrucciones  
-    | DEFECTO DOSPT {:Traduccion.add("default"); :}instrucciones 
+    | DEFECTO DOSPT {:Traduccion.add(tabuladores+"default"); :}instrucciones 
 ;
 CONBREAK::= RBREAK PTCOMA;
 
@@ -304,7 +318,8 @@ expresion ::= operaciones:a                              {:RESULT = a;:}
             |  ID:a                                         {: RESULT = a;:}  
             |  BOOLTRUE:a                                   {: RESULT = a;:} 
             |  BOOLFAL:a                                    {: RESULT = a;:} 
-            |  CADENA:a                                     {: RESULT = a;:}           
+            |  CADENA:a                                     {: RESULT = a;:} 
+            |  CHAR:a                                     {: RESULT = a;:} 
             |  PAR_IZQ expresion:e PAR_DER                  {:RESULT = e;:}
                        
 ;    
@@ -328,9 +343,9 @@ comparacion ::=
 ;
 
 logica ::= 
-           expresion:a OR:l expresion:b      {:RESULT = a + l + b;:}
-        |  expresion:a AND:l expresion:b     {:RESULT = a + l + b;:}
-        |  NEGACION:l expresion:b {:RESULT =  l + b;:}
+           expresion:a OR:l expresion:b      {:RESULT = a + " or " + b;:}
+        |  expresion:a AND:l expresion:b     {:RESULT = a + " and " + b;:}
+        |  NEGACION:l expresion:b {:RESULT =  " not " + b;:}
 ;
 
 comparativa::=
@@ -361,30 +376,18 @@ sentencia_json::= TITLE DOSPT CADENA:a {: title = a;  :}
 | CADENA DOSPT DECIMAL:a {: Valores.add(a);  :}
 ;
 
-
-Variables_globales::= VOID;
-
-
+GLOBALES::= GLOBALM
+            | GLOBAL ;
 
 
 
+Variables_globales::= VOID GLOBALES PAR_IZQ PAR_DER CHR_IZQ intrucciones_json CHR_DER;
 
-/*
-Definición de regla:
 
-expresion ::= ...: Esta línea indica que estás definiendo una regla llamada expresion. Cada regla tiene uno o más patrones que deben coincidir con ciertas estructuras en la entrada.
-Operadores y Expresiones:
+intrucciones_json ::= VARSTRING ID:a IGUAL CADENA:b  PTCOMA {: mapa.put(a, b); :}
+| VARDOUBLE ID IGUAL:a DECIMAL:b PTCOMA {: mapa.put(a, b); :}
+;
 
-Las líneas siguientes representan diferentes patrones de expresiones que pueden ser reconocidos y evaluados.
-Cada patrón consiste en un operador (como MAS, MENOS, POR, DIV) seguido de una expresión a y posiblemente una segunda expresión b.
-Después de los patrones, hay una acción entre { ... } que se ejecuta cuando el patrón coincide. Esta acción define cómo se debe evaluar la expresión y proporciona el resultado utilizando :RESULT.
-Precedencia de Operadores:
+BARRAS::= VOID GBARRAS PAR_IZQ PAR_DER CHR_IZQ CHR_DER;
 
-%prec UMENOS se usa para asignar una precedencia específica al operador MENOS. Esto asegura que la expresión UMENOS tenga una precedencia menor que otros operadores, como la suma y la resta.
-Números:
 
-Las líneas que comienzan con ENTERO:a y DECIMAL:a representan patrones para reconocer números enteros y decimales en la entrada. La acción convierte estos números en objetos Double para su posterior manipulación.
-Paréntesis:
-
-La línea PAR_IZQ expresion:a PAR_DER reconoce una expresión encerrada entre paréntesis. La acción simplemente devuelve el valor de la expresión a.
-*/

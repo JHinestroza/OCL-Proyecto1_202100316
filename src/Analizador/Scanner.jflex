@@ -42,12 +42,7 @@ DIV = "/"
 DIFERENTE = "!="
 COMMA = ","
 DOSPT = ":"
-
-
-
-
-//palabras reservadas
-
+CHAR = [\'][a-zA-Z][\']
 
 
 //expresiones
@@ -93,15 +88,19 @@ FOR = "for"
 TITLE = "\"Titulo\""
 EJEX = "\"EjeX\""
 EJEY = "\"EjeY\""
+GLOBAL = "definirglobales"
+GBARRAS = "GraficaBarras"
+
 
 %%
 
 //RESERVADAS
+<YYINITIAL> {GLOBAL}    {lexemas.add(new Tokems(yytext(), "GLOBAL", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.GLOBAL, yyline, yychar,yytext());  }
 <YYINITIAL> {REVALUAR}  {lexemas.add(new Tokems(yytext(), "REVALUAR", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.REVALUAR, yyline, yychar,yytext());  }
-<YYINITIAL> {ENCICLADO}  {lexemas.add(new Tokems(yytext(),"ENCICLADO", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.ENCICLADO, yyline, yychar,yytext());  }
-<YYINITIAL> {PRUEBA}  {lexemas.add(new Tokems(yytext(),"PRUEBA" , Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.PRUEBA, yyline, yychar,yytext());  }
-<YYINITIAL> {VARBOOL}  {lexemas.add(new Tokems(yytext(),"VARBOOL", Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.VARBOOL, yyline, yychar,yytext());  }
-<YYINITIAL> {VARCHAR}  {lexemas.add(new Tokems(yytext(),"VARCHAR", Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.VARCHAR, yyline, yychar,yytext());  }
+<YYINITIAL> {ENCICLADO} {lexemas.add(new Tokems(yytext(),"ENCICLADO", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.ENCICLADO, yyline, yychar,yytext());  }
+<YYINITIAL> {PRUEBA}    {lexemas.add(new Tokems(yytext(),"PRUEBA" , Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.PRUEBA, yyline, yychar,yytext());  }
+<YYINITIAL> {VARBOOL}   {lexemas.add(new Tokems(yytext(),"VARBOOL", Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.VARBOOL, yyline, yychar,yytext());  }
+<YYINITIAL> {VARCHAR}   {lexemas.add(new Tokems(yytext(),"VARCHAR", Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.VARCHAR, yyline, yychar,yytext());  }
 <YYINITIAL> {VARSTRING}  {lexemas.add(new Tokems(yytext(),"VARSTRING", Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.VARSTRING, yyline, yychar,yytext());  }
 <YYINITIAL> {RIF}  {lexemas.add(new Tokems(yytext(),"RIF", Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.RIF, yyline, yychar,yytext());  }
 <YYINITIAL> {DESIF}  {lexemas.add(new Tokems(yytext(),"RIF", Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.DESIF, yyline, yychar,yytext());  }
@@ -127,6 +126,10 @@ EJEY = "\"EjeY\""
 <YYINITIAL> {FOR}  {lexemas.add(new Tokems(yytext(),"FOR", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.FOR, yyline, yychar ,yytext());}
 <YYINITIAL> {EJEX}  {lexemas.add(new Tokems(yytext(),"EJEX", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.EJEX, yyline, yychar ,yytext());}
 <YYINITIAL> {EJEY}  {lexemas.add(new Tokems(yytext(),"EJEY", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.EJEY, yyline, yychar ,yytext());}
+<YYINITIAL> {GBARRAS}  {lexemas.add(new Tokems(yytext(),"GBARRAS", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.GBARRAS, yyline, yychar ,yytext());}
+
+
+
 
 
 
@@ -143,7 +146,7 @@ EJEY = "\"EjeY\""
 
 
 <YYINITIAL> {COMENTAR}   {lexemas.add(new Tokems(yytext(),"Comentario", Integer.toString(yyline), Integer.toString(yychar)));}
-<YYINITIAL> {COM_MULT}  {lexemas.add(new Tokems(yytext(),"EJEY", Integer.toString(yyline), Integer.toString(yychar)));}
+<YYINITIAL> {COM_MULT}  {lexemas.add(new Tokems(yytext(),"MULTICOMENTARIO", Integer.toString(yyline), Integer.toString(yychar)));}
 <YYINITIAL> {ENTERO}    {lexemas.add(new Tokems(yytext(),"ENTERO", Integer.toString(yyline), Integer.toString(yychar)));;   return new Symbol(sym.ENTERO, yyline, yychar ,yytext());   }
 <YYINITIAL> {DECIMAL}   {lexemas.add(new Tokems(yytext(),"DECIMAL", Integer.toString(yyline), Integer.toString(yychar)));   return new Symbol(sym.DECIMAL, yyline, yychar ,yytext());  }
 
@@ -152,6 +155,8 @@ EJEY = "\"EjeY\""
 \n {yychar=1;}
 
 <YYINITIAL> {CADENA}     {lexemas.add(new Tokems(yytext(),"CADENA", Integer.toString(yyline), Integer.toString(yychar)));; return new Symbol(sym.CADENA, yyline, yychar ,yytext());}
+
+<YYINITIAL> {CHAR} {lexemas.add(new Tokems(yytext(),"CHAR", Integer.toString(yyline), Integer.toString(yychar)));;   return new Symbol(sym.CHAR, yyline, yychar ,yytext()); }
 
 <YYINITIAL> {PUNTO}     {lexemas.add(new Tokems(yytext(),"PUNTO", Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.PUNTO, yyline, yychar ,yytext());}
 

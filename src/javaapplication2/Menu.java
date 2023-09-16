@@ -11,8 +11,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import Graficas.Graficas;
-
-
+import Reportes.Reportes;
 /**
  *
  * @author jose_
@@ -58,6 +57,11 @@ public class Menu extends javax.swing.JFrame {
         });
 
         Analizar.setText("Analizar");
+        Analizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AnalizarActionPerformed(evt);
+            }
+        });
 
         Ejecutar.setText("Ejecutar");
         Ejecutar.addActionListener(new java.awt.event.ActionListener() {
@@ -171,10 +175,13 @@ public class Menu extends javax.swing.JFrame {
         Salida.setText("");
         Ejecutar();
 
+
     }//GEN-LAST:event_EjecutarActionPerformed
 
     private void ReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReporteActionPerformed
-        Ejecutar();
+        Reportes reporte = new Reportes();
+        reporte.ReportesTokem();
+        reporte.ReportesLexema();
     }//GEN-LAST:event_ReporteActionPerformed
 
     private void ArchivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArchivoActionPerformed
@@ -187,8 +194,16 @@ public class Menu extends javax.swing.JFrame {
         Graficas grafica = new Graficas();
         grafica.GraficaBarras();
         grafica.Pie();
-    
+
     }//GEN-LAST:event_GraficarActionPerformed
+
+    private void AnalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AnalizarActionPerformed
+        Salida.setText("");
+        vaciar();
+        Analizar();
+
+
+    }//GEN-LAST:event_AnalizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -229,67 +244,60 @@ public class Menu extends javax.swing.JFrame {
     }
 
     private void Ejecutar() {
+        vaciar();
+        Analizar();
         String codigoFuente = Entrada.getText();
         StringBuilder panel = new StringBuilder();
-        try {
-            // realizar el analisis lexico con el scanner
-            scanner scan = new scanner(new java.io.StringReader(codigoFuente));
-            //  sintactico con el parser
-            parser parser = new parser(scan);
-            parser.parse();
 
-            System.out.println("Analisis realizado correctamente");
-            if (scanner.erroreslexicos.isEmpty()) {
-                System.out.println("no se encontraron errores lexicos");
-            } else {
-                
-                scanner.erroreslexicos.forEach((error) -> {
-                    //System.out.println(error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna() + "\n");
-                    String textoAgregado = error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna() + "\n";
-                    panel.append(textoAgregado);
-                });
-            }
-            if (parser.erroresSintacticos.isEmpty()) {
-                System.out.println("No se encontraron errores sintacticos");
-            } else {
-                parser.erroresSintacticos.forEach((error) -> {
-                    String textoAgregado = error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna() + "\n";
-                    panel.append(textoAgregado);
-                    //System.out.println(error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna());
-                });
-            }
-
-            if (scanner.erroreslexicos.isEmpty() && parser.erroresSintacticos.isEmpty()) {
-                parser.Traduccion.forEach((linea) -> {
-                    //System.out.println(linea);
-                    String textoAgregado = linea + "\n";
-                    panel.append(textoAgregado);
-                });
-            }
-
+        if (parser.erroresSintacticos.isEmpty()) {
+            parser.Traduccion.forEach((linea) -> {
+                String textoAgregado = linea + "\n";
+                panel.append(textoAgregado);
+            });
             String resultado = panel.toString();
-            Salida.setText(resultado);
-            Reportes();
+            Salida.append(resultado);
+        } 
+        
+        ReportesLexicos();
+        Reportes();
 
-            scanner.erroreslexicos.clear();
-            parser.erroresSintacticos.clear();
-            parser.Traduccion.clear();
-            
-            //scanner.lexemas.forEach((lexema) -> {
-                    //System.out.println(lexema.getTipo());
-                //});
-            
-            
-            
+        parser.Traduccion.clear();
+        parser.erroresSintacticos.clear();
+        scanner.lexemas.clear();
+        scanner.erroreslexicos.clear();
 
-        } catch (Exception ex) {
-            System.out.println("Error: " + ex.getMessage());
+    }
+
+    public void Analizar() {
+        StringBuilder panel = new StringBuilder();
+        if (scanner.erroreslexicos.isEmpty()) {
+            System.out.println("no se encontraron errores lexicos");
+        } else {
+            scanner.erroreslexicos.forEach((error) -> {
+                //System.out.println(error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna() + "\n");
+                String textoAgregado = error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna() + "\n";
+                panel.append(textoAgregado);
+            });
         }
+        if (parser.erroresSintacticos.isEmpty()) {
+            System.out.println("No se encontraron errores sintacticos");
+        } else {
+            parser.erroresSintacticos.forEach((error) -> {
+                String textoAgregado = error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna() + "\n";
+                panel.append(textoAgregado);
+                //System.out.println(error.getTipo() + "| " + error.getDescripcion() + "| " + error.getLinea() + "| " + error.getColumna());
+            });
+        }
+        String resultado = panel.toString();
+        System.out.println("esto es " + resultado);
+        Salida.setText(resultado);
+        ReportesLexicos();
+        Reportes();
 
     }
 
     public void Reportes() {
-        String nombreArchivo = "tabla.html";
+        String nombreArchivo = "TablaTokems.html";
         String ejecutar = Entrada.getText();
 
         try {
@@ -316,7 +324,7 @@ public class Menu extends javax.swing.JFrame {
             writer.newLine();
 
             // Encabezado de la tabla
-            writer.write("<tr>");
+            writer.write("<tr style=\"background-color: #980081; color: #ffffff; text-align: middle;\" >");
             writer.newLine();
             writer.write("<th>Lexema</th>");
             writer.newLine();
@@ -329,24 +337,9 @@ public class Menu extends javax.swing.JFrame {
             writer.write("</tr>");
             writer.newLine();
 
-            // Filas de la tabla
-            for (int i = 0; i < scanner.erroreslexicos.size(); i++) {
-                writer.write("<tr>");
-                writer.newLine();
-                writer.write("<td>" + scanner.erroreslexicos.get(i).getTipo() + "</td>");
-                writer.newLine();
-                writer.write("<td>" + scanner.erroreslexicos.get(i).getDescripcion() + "</td>");
-                writer.newLine();
-                writer.write("<td>" + scanner.erroreslexicos.get(i).getLinea() + "</td>");
-                writer.newLine();
-                writer.write("<td>" + scanner.erroreslexicos.get(i).getColumna() + "</td>");
-                writer.newLine();
-                writer.write("</tr>");
-                writer.newLine();
-            }
-            //System.out.println("tamano es  "+ scanner.lexemas.size());
+            System.out.println(scanner.lexemas.size());
             for (int i = 0; i < scanner.lexemas.size(); i++) {
-                writer.write("<tr>");
+                writer.write("<tr style=\"background-color: rgb(223, 223, 223);\" >");
                 writer.newLine();
                 writer.write("<td>" + scanner.lexemas.get(i).getTipo() + "</td>");
                 writer.newLine();
@@ -375,6 +368,99 @@ public class Menu extends javax.swing.JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public void vaciar() {
+        String codigoFuente = Entrada.getText();
+        try {
+            // realizar el analisis lexico con el scanner
+            scanner scan = new scanner(new java.io.StringReader(codigoFuente));
+            //  sintactico con el parser
+            parser parser = new parser(scan);
+            parser.parse();
+            System.out.println("Analisis realizado correctamente");
+
+        } catch (Exception ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+    }
+
+    public void ReportesLexicos() {
+        String nombreArchivo = "TablaLexicos.html";
+        String ejecutar = Entrada.getText();
+
+        try {
+            //  sintactico con el parser
+            parser parser = new parser();
+            BufferedWriter writer = new BufferedWriter(new FileWriter(nombreArchivo));
+
+            // Escribir el encabezado HTML
+            writer.write("<!DOCTYPE html>");
+            writer.newLine();
+            writer.write("<html>");
+            writer.newLine();
+            writer.write("<head>");
+            writer.newLine();
+            writer.write("<title>Tabla HTML generada desde Java</title>");
+            writer.newLine();
+            writer.write("</head>");
+            writer.newLine();
+            writer.write("<body>");
+            writer.newLine();
+
+            // Crear la tabla HTML
+            writer.write("<table style=\"collapse; margin: 25px 0; font-size: 1em; font-family: sans-serif; min-width: 450px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); padding: 12px 15px;\">");
+            writer.newLine();
+
+            // Encabezado de la tabla
+            writer.write("<tr style=\"background-color: #980081; color: #ffffff; text-align: middle;\">");
+            writer.newLine();
+            writer.write("<th>Lexema</th>");
+            writer.newLine();
+            writer.write("<th>Token</th>");
+            writer.newLine();
+            writer.write("<th>Linea</th>");
+            writer.newLine();
+            writer.write("<th>columna</th>");
+            writer.newLine();
+            writer.write("</tr>");
+            writer.newLine();
+
+            // Filas de la tabla
+            System.out.println(scanner.erroreslexicos.size());
+            for (int i = 0; i < scanner.erroreslexicos.size(); i++) {
+                writer.write("<tr style=\"background-color: rgb(223, 223, 223);\">");
+                writer.newLine();
+                writer.write("<td>" + scanner.erroreslexicos.get(i).getTipo() + "</td>");
+                writer.newLine();
+                writer.write("<td>" + scanner.erroreslexicos.get(i).getDescripcion() + "</td>");
+                writer.newLine();
+                writer.write("<td>" + scanner.erroreslexicos.get(i).getLinea() + "</td>");
+                writer.newLine();
+                writer.write("<td>" + scanner.erroreslexicos.get(i).getColumna() + "</td>");
+                writer.newLine();
+                writer.write("</tr>");
+                writer.newLine();
+            }
+            //System.out.println("tamano es  "+ scanner.lexemas.size());
+
+            // Cerrar la tabla y el cuerpo del HTML
+            writer.write("</table>");
+            writer.newLine();
+            writer.write("</body>");
+            writer.newLine();
+            writer.write("</html>");
+            writer.newLine();
+
+            // Cerrar el archivo
+            writer.close();
+
+            System.out.println("Tabla HTML generada con éxito en " + nombreArchivo);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
