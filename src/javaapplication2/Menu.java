@@ -453,7 +453,7 @@ public class Menu extends javax.swing.JFrame {
             writer.newLine();
 
             // Encabezado de la tabla
-            writer.write("<tr style=\"background-color: #980081; color: #ffffff; text-align: middle;\">");
+            writer.write("<tr style=\"background-color: #923425; color: #ffffff; text-align: middle;\">");
             writer.newLine();
             writer.write("<th>Lexema</th>");
             writer.newLine();
