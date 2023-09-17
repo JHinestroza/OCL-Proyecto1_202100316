@@ -9,9 +9,9 @@ import Graficas.Graficas;
 parser code
 {://Codigo visible
     public static HashMap<String, String> mapa = new HashMap<>();
+    public static HashMap<String, String> claves = new HashMap<>(); 
+    public static HashMap<String, HashMap> Jsons = new HashMap<>();    
     public static ArrayList<String> Traduccion = new ArrayList<String>();
-    public static ArrayList<String> Grafica = new ArrayList<String>();
-    public static ArrayList<String> Valores = new ArrayList<String>();
     public static ArrayList<Exception_> erroresSintacticos = new ArrayList<Exception_>(); //ArrayList del los errores sintacticos
     public static String tabuladores = "";
     public static int reduccionDeTabulaciones = 0;
@@ -21,6 +21,7 @@ parser code
     public static String ejey = "";
     public static Object ejes = "";
     public static Object valores = "";
+    
 
 
     public void syntax_error(Symbol s){
@@ -51,11 +52,12 @@ terminal String CHR_DER;
 terminal String ID;
 terminal String IGUAL;
 terminal String RIF;
-terminal String EJEX, EJEY;
 terminal String GLOBAL, GLOBALM;
 terminal String GBARRAS;
 terminal String ARREGLO;
 terminal String TITULOG, TITLEY, TITLEX, GPIE;
+terminal String DOLLAR;
+terminal String NEWVAL;
 
 
 terminal String IGUALDAD, MENOR_QUE,MAYOR_QUE, MENOR_IGUAL, MAYOR_IGUAL, DIFERENTE, OR, AND;
@@ -64,7 +66,6 @@ terminal String DESIF;
 terminal String BOOLTRUE,BOOLFAL, NEGACION; 
 terminal String COMMA; 
 terminal String RSWITCH ,RCASE ,RBREAK, DOSPT, DEFECTO;
-terminal String TITLE;
 terminal String RDO;
 terminal String FOR;
 terminal String CHAR;
@@ -285,7 +286,6 @@ else_simple::= CHR_IZQ
 //
 
 
-
 //SETENCIA SWITCH
 sentencia_switch ::= RSWITCH PAR_IZQ expresion:a PAR_DER CHR_IZQ
 {:
@@ -339,19 +339,20 @@ expresion ::= operaciones:a                              {:RESULT = a;:}
 
 operaciones ::= 
                expresion:a MAS expresion:b              {:RESULT = a + "+" + b;:} 
-            |  MENOS expresion:a                        {:RESULT="-"+a;:}%prec UMENOS     
+            |  MENOS expresion:a                        {:RESULT="-"+a;:}%prec UMENOS 
+            |  expresion:a COMMA expresion:b            {:RESULT = a + "," + b;:}
             |  expresion:a MENOS expresion:b            {:RESULT = a + "-" + b;:}                     
             |  expresion:a POR expresion:b              {:RESULT = a + "*" + b;:}  
             |  expresion:a DIV expresion:b              {:RESULT = a + "/" + b;:}
             |  expresion:a IGUAL expresion:b            {:RESULT = a + "=" + b;:}
-            |  expresion:a COMMA expresion:b            {:RESULT = a + "," + b;:}
+            
             ;
 
 comparacion ::= 
                expresion:a IGUALDAD:signo expresion:b         {:RESULT = a + signo + b;:}
             |  expresion:a MAYOR_QUE:signo expresion:b        {:RESULT = a + signo + b;:}
-            |  expresion:a MENOR_QUE:signo expresion:b        {:RESULT = a + signo + b;:}
             |  expresion:a MENOR_IGUAL:signo expresion:b      {:RESULT = a + signo + b;:}
+            |  expresion:a MENOR_QUE:signo expresion:b        {:RESULT = a + signo + b;:}          
             |  expresion:a MAYOR_IGUAL:signo expresion:b      {:RESULT = a + signo + b;:}
             |  expresion:a DIFERENTE:signo expresion:b        {:RESULT = a + signo + b;:}
 ;
@@ -373,21 +374,21 @@ comparativa::=
 
 
 
-JSON::= CHR_IZQ sentencias_json CHR_DER  {:
-System.out.println("HE Recibido un JSON");
-:};
+JSON::= CHR_IZQ sentencias_json CHR_DER {:
+    System.out.println(Graficas.nombrejson);
+    Jsons.put( Graficas.nombrejson, mapa);
+:} 
+;
 
 
 sentencias_json ::= sentencia_json
           | sentencia_json COMMA sentencias_json 
 ;
 
-
-sentencia_json::= TITLE DOSPT CADENA:a {: title = a;  :}
-| EJEX DOSPT CADENA:a {: ejex = a;  :}
-| EJEY  DOSPT CADENA:a {: ejey = a;  :}
-| CADENA DOSPT CADENA:a {: Grafica.add(a);  :}
-| CADENA DOSPT DECIMAL:a {: Valores.add(a);  :}
+//JSON
+sentencia_json::= CADENA:a DOSPT CADENA:b {: mapa.put(a, b); :}
+            | CADENA:a DOSPT DECIMAL:b {: mapa.put(a, b); System.out.println(b);  :}
+            | CADENA:a DOSPT ENTERO:b {: mapa.put(a, b); :}
 ;
 
 
@@ -401,7 +402,9 @@ globales ::=  global PTCOMA
 global ::= VARDOUBLE ID:a IGUAL DECIMAL:b  {: mapa.put(a, b);:}
 |  VARSTRING ID:a IGUAL CADENA:b  {: mapa.put(a, b);:}
 |  VARDOUBLE ID:a IGUAL ENTERO:b  {: mapa.put(a, b);:}
-; 
+|  VARDOUBLE ID:a IGUAL instancia:b {: mapa.put(a, b.toString());:}
+|  VARSTRING ID:a IGUAL instancia:b {: mapa.put(a, b.toString());:}
+;   
 
 
 //GRAFICA DE BARRAS
@@ -422,17 +425,30 @@ BarrasGlobal::= VARSTRING ARREGLO ID IGUAL CHR_IZQ Intancias:a CHR_DER {:ejes = 
                 | VARSTRING TITULOG IGUAL CADENA:a {: title = a; :}
                 | VARSTRING TITLEY IGUAL CADENA:a {: System.out.println(a); ejey = a; :}
                 | VARSTRING TITLEX IGUAL CADENA:a {: ejex = a; :}
-
+                | VARSTRING TITULOG IGUAL ID:a {: String valor = mapa.get(a); System.out.println("este es el titulo"+valor); title = valor; :}
+                | VARDOUBLE ARREGLO ID IGUAL instancia:a {: valores = a; :}
+                | VARSTRING TITULOG IGUAL instancia:a {: title = a.toString(); :}
+                | VARSTRING TITLEY IGUAL ID:a {: String valor = mapa.get(a); ejey = valor; :}
+                | VARSTRING TITLEX IGUAL ID:a {: String valor = mapa.get(a); ejex = valor;:}
 ;
 
-Intancias ::= ID:b                           {:String valor = mapa.get(b);    RESULT = valor;:} 
-            | ID:a COMMA Intancias:b         {:String valor = mapa.get(a);  RESULT = valor +","+ b;:}
-            | DECIMAL:a                      {:RESULT = a;:} 
+Intancias ::= ID:b                           {:String valor = mapa.get(b);   RESULT = valor;:} 
+            | ID:a COMMA Intancias:b         {:String valor = mapa.get(a); System.out.println(a);   RESULT = valor +","+ b;:}
+            | DECIMAL:b                      {:RESULT = b;:} 
             | DECIMAL:a COMMA Intancias:b    {:RESULT = a +","+ b;:}
-            | CADENA:a                       {:RESULT = a;:} 
-            | CADENA:a COMMA Intancias:b     {:RESULT = a +","+ b;:}                        
+            | CADENA:b                       {:RESULT = b;:} 
+            | CADENA:a COMMA Intancias:b     {:RESULT = a +","+ b;:} 
+            | instancia:b                    {:RESULT = b;:} 
+            | instancia:a COMMA Intancias:b  {:RESULT = a +","+ b;:}         
 ;
  
+instancia ::= DOLLAR CHR_IZQ NEWVAL COMMA CADENA:a COMMA CADENA:b CHR_DER 
+     {:
+    //System.out.println(a);
+    HashMap clave = Jsons.get(a.toString());; 
+    Object valor = clave.get(b);  
+    RESULT = valor;:} 
+ ;
 
 //GRAFICA DE PIE
 PIE::= VOID GPIE PAR_IZQ PAR_DER CHR_IZQ BarrasGlobales CHR_DER 

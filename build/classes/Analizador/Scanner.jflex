@@ -44,6 +44,7 @@ COMMA = ","
 DOSPT = ":"
 CHAR = [\'][a-zA-Z][\']
 ARREGLO = "[]"
+DOLLAR = "$"
 
 
 //expresiones
@@ -86,15 +87,13 @@ RBREAK = "break"
 DEFECTO = "default"
 RDO = "do"
 FOR = "for"
-TITLE = "\"Titulo\""
-EJEX = "\"EjeX\""
-EJEY = "\"EjeY\""
 GLOBAL = "definirglobales"
 GBARRAS = "GraficaBarras"
 GPIE = "GraficaPie"
 TITLEX = "TituloX"
 TITLEY = "TituloY"
 TITULOG = "Titulo"
+NEWVAL = "NewValor"
 
 %%
 
@@ -122,22 +121,18 @@ TITULOG = "Titulo"
 <YYINITIAL> {RSWITCH}  {lexemas.add(new Tokems(yytext(),"RSWITCH", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.RSWITCH, yyline, yychar ,yytext());}
 <YYINITIAL> {RCASE}  {lexemas.add(new Tokems(yytext(),"RCASE", Integer.toString(yyline), Integer.toString(yychar))); return new Symbol(sym.RCASE, yyline, yychar ,yytext());}
 <YYINITIAL> {RBREAK}  {lexemas.add(new Tokems(yytext(),"RBREAK", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.RBREAK, yyline, yychar ,yytext());}
-<YYINITIAL> {TITLE}  {lexemas.add(new Tokems(yytext(),"TITLE", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.TITLE, yyline, yychar ,yytext());}
-<YYINITIAL> {VARDOUBLE}  {lexemas.add(new Tokems(yytext(),"VARDOUBLE", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.VARDOUBLE, yyline, yychar ,yytext());}
-<YYINITIAL> {NEGACION}  {lexemas.add(new Tokems(yytext(),"NEGACION", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.NEGACION, yyline, yychar ,yytext());}
+<YYINITIAL> {VARDOUBLE} {lexemas.add(new Tokems(yytext(),"VARDOUBLE", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.VARDOUBLE, yyline, yychar ,yytext());}
+<YYINITIAL> {NEGACION} {lexemas.add(new Tokems(yytext(),"NEGACION", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.NEGACION, yyline, yychar ,yytext());}
 <YYINITIAL> {DEFECTO}  {lexemas.add(new Tokems(yytext(),"DEFECTO", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.DEFECTO, yyline, yychar ,yytext());}
-<YYINITIAL> {RDO}  {lexemas.add(new Tokems(yytext(),"RDO", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.RDO, yyline, yychar ,yytext());}
-<YYINITIAL> {FOR}  {lexemas.add(new Tokems(yytext(),"FOR", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.FOR, yyline, yychar ,yytext());}
-<YYINITIAL> {EJEX}  {lexemas.add(new Tokems(yytext(),"EJEX", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.EJEX, yyline, yychar ,yytext());}
-<YYINITIAL> {EJEY}  {lexemas.add(new Tokems(yytext(),"EJEY", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.EJEY, yyline, yychar ,yytext());}
+<YYINITIAL> {RDO}      {lexemas.add(new Tokems(yytext(),"RDO", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.RDO, yyline, yychar ,yytext());}
+<YYINITIAL> {FOR}      {lexemas.add(new Tokems(yytext(),"FOR", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.FOR, yyline, yychar ,yytext());}
 <YYINITIAL> {GBARRAS}  {lexemas.add(new Tokems(yytext(),"GBARRAS", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.GBARRAS, yyline, yychar ,yytext());}
-<YYINITIAL> {TITLEX}  {lexemas.add(new Tokems(yytext(),"TITLEX", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.TITLEX, yyline, yychar ,yytext());}
-<YYINITIAL> {TITLEY}  {lexemas.add(new Tokems(yytext(),"TITLEY", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.TITLEY, yyline, yychar ,yytext());}
+<YYINITIAL> {TITLEX}   {lexemas.add(new Tokems(yytext(),"TITLEX", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.TITLEX, yyline, yychar ,yytext());}
+<YYINITIAL> {TITLEY}   {lexemas.add(new Tokems(yytext(),"TITLEY", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.TITLEY, yyline, yychar ,yytext());}
 <YYINITIAL> {TITULOG}  {lexemas.add(new Tokems(yytext(),"TITULOG", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.TITULOG, yyline, yychar ,yytext());}
-<YYINITIAL> {GPIE}  {lexemas.add(new Tokems(yytext(),"GPIE", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.GPIE, yyline, yychar ,yytext());}
-
-
-
+<YYINITIAL> {GPIE}     {lexemas.add(new Tokems(yytext(),"GPIE", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.GPIE, yyline, yychar ,yytext());}
+<YYINITIAL> {DOLLAR}     {lexemas.add(new Tokems(yytext(),"DOLLAR", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.DOLLAR, yyline, yychar ,yytext());}
+<YYINITIAL> {NEWVAL}     {lexemas.add(new Tokems(yytext(),"NEWVAL", Integer.toString(yyline), Integer.toString(yychar)));  return new Symbol(sym.NEWVAL, yyline, yychar ,yytext());}
 
 
 
