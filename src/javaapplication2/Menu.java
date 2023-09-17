@@ -220,7 +220,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void GraficarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GraficarActionPerformed
         Graficas grafica = new Graficas();
-        //grafica.GraficaBarras();
+        grafica.GraficaBarras();
         grafica.MostrarGraficaBarras();
         grafica.MostrarGraficaPie();
     }//GEN-LAST:event_GraficarActionPerformed
@@ -403,7 +403,7 @@ public class Menu extends javax.swing.JFrame {
             // Cerrar el archivo
             writer.close();
             
-            System.out.println("Tabla HTML generada con éxito en " + nombreArchivo);
+            //System.out.println("Tabla HTML generada con éxito en " + nombreArchivo);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -495,7 +495,7 @@ public class Menu extends javax.swing.JFrame {
             // Cerrar el archivo
             writer.close();
 
-            System.out.println("Tabla HTML generada con éxito en " + nombreArchivo);
+            //System.out.println("Tabla HTML generada con éxito en " + nombreArchivo);
         } catch (IOException e) {
             e.printStackTrace();
         }

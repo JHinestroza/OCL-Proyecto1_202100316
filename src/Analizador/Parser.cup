@@ -420,16 +420,11 @@ BarrasGlobales::= BarrasGlobal PTCOMA
                 | BarrasGlobal PTCOMA BarrasGlobales
 ;
 
-BarrasGlobal::= VARSTRING ARREGLO ID IGUAL CHR_IZQ Intancias:a CHR_DER {:ejes = a; :}
-                | VARDOUBLE ARREGLO ID IGUAL CHR_IZQ Intancias:a CHR_DER {:valores = a; System.out.println(a);:}
-                | VARSTRING TITULOG IGUAL CADENA:a {: title = a; :}
-                | VARSTRING TITLEY IGUAL CADENA:a {: System.out.println(a); ejey = a; :}
-                | VARSTRING TITLEX IGUAL CADENA:a {: ejex = a; :}
-                | VARSTRING TITULOG IGUAL ID:a {: String valor = mapa.get(a); System.out.println("este es el titulo"+valor); title = valor; :}
-                | VARDOUBLE ARREGLO ID IGUAL instancia:a {: valores = a; :}
-                | VARSTRING TITULOG IGUAL instancia:a {: title = a.toString(); :}
-                | VARSTRING TITLEY IGUAL ID:a {: String valor = mapa.get(a); ejey = valor; :}
-                | VARSTRING TITLEX IGUAL ID:a {: String valor = mapa.get(a); ejex = valor;:}
+BarrasGlobal::= VARSTRING ARREGLO ID IGUAL CHR_IZQ Intancias:a CHR_DER {:ejes = a; :}          
+                | VARSTRING TITULOG IGUAL Intancias:a {: String valor = mapa.get(a); System.out.println("este es el titulo"+valor); title = valor; :}
+                | VARDOUBLE ARREGLO ID IGUAL CHR_IZQ Intancias:a CHR_DER {: valores = a; :}            
+                | VARSTRING TITLEY IGUAL Intancias:a {: ejey = a.toString(); :}
+                | VARSTRING TITLEX IGUAL Intancias:a {: ejex = a.toString();:}
 ;
 
 Intancias ::= ID:b                           {:String valor = mapa.get(b);   RESULT = valor;:} 
