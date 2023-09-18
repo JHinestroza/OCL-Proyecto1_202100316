@@ -173,4 +173,11 @@ public class Graficas {
             }
         }
     }
+        public static Object VerNULL(Object verificar, Object id) {
+            if (verificar != null){
+                return verificar;
+            }else{
+                return id;
+            }
+    }
 }

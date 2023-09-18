@@ -2200,7 +2200,7 @@ Traduccion.add(tabuladores+"default");
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object a = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 ejey = a.toString(); 
+		 ejey = ""; ejey = a.toString(); 
               CUP$parser$result = parser.getSymbolFactory().newSymbol("BarrasGlobal",37, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2212,7 +2212,7 @@ Traduccion.add(tabuladores+"default");
 		int aleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int aright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object a = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		 ejex = a.toString();
+		  ejex = ""; ejex = a.toString();
               CUP$parser$result = parser.getSymbolFactory().newSymbol("BarrasGlobal",37, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-3)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -2239,7 +2239,7 @@ Traduccion.add(tabuladores+"default");
 		int bleft = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).left;
 		int bright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Object b = (Object)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
-		String valor = mapa.get(a); System.out.println(a);   RESULT = valor +","+ b;
+		String valor = mapa.get(a);  RESULT = valor +","+ b;
               CUP$parser$result = parser.getSymbolFactory().newSymbol("Intancias",38, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;

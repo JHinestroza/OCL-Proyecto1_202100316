@@ -42,7 +42,7 @@ DIV = "/"
 DIFERENTE = "!="
 COMMA = ","
 DOSPT = ":"
-CHAR = [\'][a-zA-Z][\']
+CHAR = \'(([^\"\\]?|\\.))\'
 ARREGLO = "[]"
 DOLLAR = "$"
 

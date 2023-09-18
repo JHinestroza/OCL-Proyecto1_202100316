@@ -423,12 +423,12 @@ BarrasGlobales::= BarrasGlobal PTCOMA
 BarrasGlobal::= VARSTRING ARREGLO ID IGUAL CHR_IZQ Intancias:a CHR_DER {:ejes = a; :}          
                 | VARSTRING TITULOG IGUAL Intancias:a {: String valor = mapa.get(a); System.out.println("este es el titulo"+valor); title = valor; :}
                 | VARDOUBLE ARREGLO ID IGUAL CHR_IZQ Intancias:a CHR_DER {: valores = a; :}            
-                | VARSTRING TITLEY IGUAL Intancias:a {: ejey = a.toString(); :}
-                | VARSTRING TITLEX IGUAL Intancias:a {: ejex = a.toString();:}
+                | VARSTRING TITLEY IGUAL Intancias:a {: ejey = ""; ejey = a.toString(); :}
+                | VARSTRING TITLEX IGUAL Intancias:a {:  ejex = ""; ejex = a.toString();:}
 ;
 
 Intancias ::= ID:b                           {:String valor = mapa.get(b);   RESULT = valor;:} 
-            | ID:a COMMA Intancias:b         {:String valor = mapa.get(a); System.out.println(a);   RESULT = valor +","+ b;:}
+            | ID:a COMMA Intancias:b         {:String valor = mapa.get(a);  RESULT = valor +","+ b;:}
             | DECIMAL:b                      {:RESULT = b;:} 
             | DECIMAL:a COMMA Intancias:b    {:RESULT = a +","+ b;:}
             | CADENA:b                       {:RESULT = b;:} 
